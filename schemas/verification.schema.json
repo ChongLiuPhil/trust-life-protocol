@@ -14,6 +14,8 @@
     "verifiedAt": {"type": "string", "format": "date-time"},
     "validUntil": {"type": "string", "format": "date-time"},
     "reportUri": {"type": "string", "format": "uri-reference"},
+    "credentialUri": {"type": "string", "format": "uri-reference"},
+    "credentialMediaType": {"type": "string"},
     "notes": {"type": "string"}
   }
 }
