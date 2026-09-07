@@ -1,0 +1,4 @@
+field_id,data_category,purpose,subject_type,source,visibility,contains_personal_data,contains_sensitive_business_data,retention_period,access_roles,public_projection,legal_or_policy_basis,notes
+EXAMPLE-001,facility-identity,scope-verification,facility,applicant,restricted,no,yes,REPLACE,pilot-operator|qualified-verifier,summary-only,REPLACE,Template row only
+EXAMPLE-002,process-observation,requirement-evidence,process,operator-system,restricted,possible,yes,REPLACE,qualified-verifier,redacted-metadata,REPLACE,Prefer process evidence over person-identifying footage
+EXAMPLE-003,laboratory-report,independent-verification,batch,qualified-laboratory,restricted,no,possible,REPLACE,qualified-verifier|pilot-operator,selected-public-metadata,REPLACE,Do not publish confidential methods or personal signatures unless justified
