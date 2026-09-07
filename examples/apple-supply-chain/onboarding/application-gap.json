@@ -1,0 +1,39 @@
+{
+  "applicationVersion": "0.4",
+  "id": "tl:onboarding:green-orchard-2026-gap-demo",
+  "applicantOrganizationId": "tl:org:green-orchard",
+  "profileId": "TL-FRESH-PRODUCE-001",
+  "profileVersion": "0.4.0",
+  "submittedAt": "2026-09-07T11:41:00Z",
+  "publicDisplayName": "Green Orchard Gap Case (Synthetic)",
+  "scope": {
+    "facilitySubjectIds": ["tl:subject:green-orchard-demo-facility"],
+    "coveredSubjectIds": ["tl:subject:apple-2026-0001", "tl:subject:shipment-2026-0001"],
+    "activities": ["primary-production", "harvest", "dispatch", "condition-observed-transport"],
+    "jurisdictions": ["CN-SD"]
+  },
+  "declarations": {
+    "privacyNoticePublished": true,
+    "dataMinimizationReviewed": true,
+    "prohibitedPrivateAreaMonitoringExcluded": true,
+    "correctionProcessAvailable": true,
+    "appealProcessAvailable": false,
+    "portableVerificationLinkPlanned": false
+  },
+  "requirementResponses": [
+    {"requirementId":"FP-ID-SCOPE-001","response":"declared"},
+    {"requirementId":"FP-PRODUCT-TRACE-010","response":"mapped","claimIds":["tl:claim:production-records"]},
+    {"requirementId":"FP-OBSERVABILITY-020","response":"mapped","claimIds":["tl:claim:continuous-observation"]},
+    {"requirementId":"FP-LAB-030","response":"pending","justification":"Independent verification mapping intentionally omitted for negative-test coverage."},
+    {"requirementId":"FP-HANDOFF-040","response":"mapped","claimIds":["tl:claim:cold-chain"]},
+    {"requirementId":"FP-INCIDENT-050","response":"declared"},
+    {"requirementId":"FP-PRIVACY-060","response":"declared"},
+    {"requirementId":"FP-DUE-PROCESS-070","response":"pending","justification":"Appeal route intentionally unavailable in this negative fixture."},
+    {"requirementId":"FP-DIGITAL-LINK-080","response":"pending"}
+  ],
+  "publicChannels": {
+    "correction": "trust-life:demo:correction-channel"
+  },
+  "publicationConsent": true,
+  "notes": "Deliberate negative fixture. The evaluator must return not-ready and must not average away blocking gaps."
+}
