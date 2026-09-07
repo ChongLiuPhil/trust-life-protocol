@@ -1,0 +1,13 @@
+{
+  "registryVersion": "0.2",
+  "operator": "Trust & Life Reference Implementation (Demo)",
+  "profiles": [
+    {"id":"TL-CORE-001","version":"0.1","status":"draft"},
+    {"id":"TL-FOOD-001","version":"0.1","status":"draft"}
+  ],
+  "subjects": [
+    {"id":"tl:subject:apple-2026-0001","bundle":"../examples/apple-supply-chain/trust-bundle.json","verificationPath":"/verify?subject=tl%3Asubject%3Aapple-2026-0001"},
+    {"id":"tl:subject:shipment-2026-0001","bundle":"../examples/apple-supply-chain/trust-bundle.json","verificationPath":"/verify?subject=tl%3Asubject%3Ashipment-2026-0001"}
+  ],
+  "notice": "Synthetic registry fixture. Listing is not endorsement or certification."
+}

@@ -1,34 +1,46 @@
-# Reference Implementation v0.1
+# Reference Implementation v0.2
 
-The first reference implementation deliberately stays small and dependency-free.
+The reference implementation remains dependency-free and intentionally small.
 
-## Semantic verifier
-
-Requires a current Node.js runtime.
+## 1. Evidence and semantic verifier
 
 ```bash
 cd reference-implementation
 npm run verify:demo
 ```
 
-The verifier checks:
+The verifier checks cross-object references, T0–T3 relationships, independent verification for T3, conformance-level aggregation, evidence-path containment, and the **actual SHA-256 bytes** of local evidence files.
 
-1. cross-object references;
-2. SHA-256 digest syntax;
-3. T1 evidence presence;
-4. T2 continuous/sensor evidence expectations;
-5. T3 independent-verifier requirement;
-6. conformance aggregation warnings;
-7. unresolved incident count.
+A matching digest establishes byte-level integrity relative to the recorded digest; it does not establish factual truth or food safety.
 
-It does **not** verify the bytes behind demonstration evidence URIs, digital signatures, factual truth, legal compliance, or food safety. Those are separate verification layers.
+## 2. VC structure check
 
-## Public verification page
+```bash
+npm run verify:vc
+```
 
-Serve the repository root over HTTP, for example with any static development server, and open:
+The demo credential is deliberately unsecured. The checker validates basic VC 2.0 structure and warns that no cryptographic proof is present.
 
-`reference-implementation/web/index.html`
+Run both checks with:
 
-The page renders the synthetic apple-batch verification bundle in a consumer-readable form and exposes the current URL so it can be encoded into a QR code by a merchant, label system, or deployment pipeline.
+```bash
+npm run verify
+```
 
-A future version should add cryptographic digest checking, signed credentials, EPCIS adapters, incident submission, and deployable QR generation.
+## 3. Read-only registry and verification page
+
+```bash
+npm run serve
+```
+
+Then open:
+
+`http://127.0.0.1:8080/verify?subject=tl%3Asubject%3Aapple-2026-0001`
+
+The browser retrieves public evidence files and independently recomputes their SHA-256 digests using the Web Crypto API. The same page can also operate as a static site using its bundled-data fallback.
+
+The displayed verification URL is the intended QR-code target. The protocol does not require a particular QR rendering library or central domain.
+
+## Boundaries
+
+This reference implementation does not provide payments, seller onboarding, identity proofing, real laboratory integrations, real credential signatures, authorization for private evidence, or formal certification services.

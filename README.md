@@ -8,148 +8,131 @@
 
 Trust & Life Protocol is an open-source framework for building **verifiable trust** between producers, processors, logistics providers, retailers, inspectors, consumers, and other participants in everyday supply chains.
 
-信·生开放互信协议是一套面向民生产业链的开源互信框架。它的目标不是要求公众“相信某个平台”，而是让重要商业声明尽可能具有可检查、可追溯、可验证的证据基础。
+信·生开放互信协议是一套面向民生产业链的开源互信框架。目标不是要求公众“相信某个平台”，而是让重要商业声明尽可能具有可检查、可追溯、可验证的证据基础。
 
 ## Core idea / 核心思想
 
 **Claim → Evidence → Verification → Trust**  
 **声明 → 证据 → 验证 → 信任**
 
-Trust & Life is not primarily a marketplace, a certification company, or a blockchain project. It is a protocol for answering a more fundamental question:
+Trust & Life is not primarily a marketplace, certification company, or blockchain project. It asks a more fundamental question:
 
 > When an organization makes a claim about how a product was produced, stored, transported, inspected, or sold, how can another person independently examine the evidence behind that claim?
 
-当企业声称某件商品按照特定方式生产、储存、运输、检测或销售时，其他人怎样能够独立检查支撑这一声明的证据？
+## Four layers
 
-## What this project provides / 项目提供什么
+1. **Standards** — open, versioned requirements.
+2. **Evidence** — structured records, media references, sensor data, reports, and attestations.
+3. **Verification** — source attribution, integrity checking, review status, validity, and visible limitations.
+4. **Commerce** — an optional transaction layer that does not define the meaning of trust.
 
-The project is organized around four layers:
+## Design principles
 
-1. **Standards** — open, versioned requirements describing responsible and observable practices.
-2. **Evidence** — structured records such as process logs, images, video references, sensor data, inspection reports, and signed attestations.
-3. **Verification** — mechanisms for identifying evidence sources, checking integrity, recording review status, and preserving change history.
-4. **Commerce** — optional interfaces that allow conforming products or organizations to participate in transactions without making the protocol dependent on a central marketplace.
+- **Verifiable transparency, not blind trust.**
+- **Process transparency, not human surveillance.**
+- **Open protocol, plural implementations.**
+- **Interoperability first.**
+- **Blockchain optional.**
+- **No absolute-safety claims.**
+- **Due process for public reports and disputes.**
+- **Responsible economics rather than destructive price competition.**
 
-项目首先建设开放规范、证据模型和验证机制；交易平台只是可选层，而不是协议本身。
-
-## Design principles / 设计原则
-
-- **Verifiable transparency, not blind trust.** Trust should be supported by inspectable evidence.
-- **Process transparency, not human surveillance.** Observe relevant processes while protecting workers, personal data, private spaces, and legitimate commercial secrets.
-- **Open protocol, plural implementations.** A retailer, cooperative, marketplace, public-interest organization, or independent software project should be able to implement the protocol.
-- **Interoperability first.** Reuse established standards where appropriate instead of inventing incompatible private formats.
-- **Blockchain optional.** Cryptographic hashes, signed records, append-only logs, transparency logs, or distributed ledgers may be used as integrity mechanisms; no blockchain is required for participation.
-- **No absolute-safety claims.** Evidence can increase justified confidence but cannot prove that a product is absolutely risk-free.
-- **Due process for public review.** Reports and disputes require evidence, review, response, appeal, and visible resolution states; the system should not reward accusation or public shaming.
-- **Responsible economics.** Trust & Life does not promote destructive price competition. Responsible producers, workers, logistics providers, retailers, and service providers must remain economically sustainable.
-
-## Conformance levels / 符合性等级
+## Evidence-strength levels
 
 | Level | Name | Meaning |
 | --- | --- | --- |
-| **T0** | Declared | Information is self-declared by the organization. |
-| **T1** | Evidence-backed | Required evidence has been submitted and linked to relevant claims. |
-| **T2** | Continuously Observable | Defined processes have continuing or recurring observational evidence with documented coverage and gaps. |
-| **T3** | Independently Verified | Defined claims or evidence have been reviewed or attested by an independent qualified party. |
+| **T0** | Declared | Information is self-declared. |
+| **T1** | Evidence-backed | Required evidence is linked to the claim. |
+| **T2** | Continuously Observable | Defined processes have recurring/continuous observational evidence with documented scope and gaps. |
+| **T3** | Independently Verified | A defined claim has been reviewed or attested by an independent qualified party. |
 
-A level describes **evidential status**, not a guarantee of product safety or moral perfection.
+Overall conformance MUST NOT be displayed at a level higher than the weakest included claim unless a domain profile defines and justifies another aggregation rule.
 
-## v0.1 runnable prototype / 可运行原型
+## v0.2 runnable prototype / 可运行原型
 
-The repository now contains a minimal end-to-end demonstration:
+v0.2 completes the first machine-verifiable loop:
 
-**Organization → Product/Batch → Claims → Evidence → Verification → Incidents → Conformance**
+**Organization → Subject → Claim → Evidence bytes → Verification → Conformance → Public Registry View**
 
-Included in v0.1:
+It includes:
 
-- eight JSON Schemas for the portable trust bundle;
-- a synthetic apple-batch supply-chain example;
-- production-record, continuous-observation, laboratory-report, and temperature-log evidence examples;
-- a dependency-free Node.js semantic verifier;
-- a browser-based public verification page;
-- explicit limitations distinguishing evidence verification from factual truth or food-safety certification.
+- eight JSON Schemas and a portable v0.2 trust bundle;
+- a synthetic apple supply-chain example;
+- real SHA-256 digests for all local demonstration evidence;
+- a dependency-free Node.js verifier that recomputes evidence hashes;
+- a read-only Registry API and consumer verification page;
+- browser-side SHA-256 rechecking with Web Crypto;
+- a QR-target verification URL based on the stable subject ID;
+- an illustrative GS1 EPCIS mapping and JSON-LD event export;
+- a W3C Verifiable Credentials Data Model 2.0 laboratory-attestation fixture;
+- CI that verifies the bundle, checks the VC structure, and smoke-tests the Registry API.
 
-### Run the demo verifier
+### Run
 
 ```bash
 cd reference-implementation
-npm run verify:demo
+npm run verify
+npm run serve
 ```
 
-The verifier checks references, evidence requirements, basic T0–T3 semantics, independent verification for T3, conformance aggregation warnings, and unresolved incidents.
-
-It does **not** establish factual truth, legal compliance, product safety, or the authenticity of the synthetic example evidence.
-
-### Open the public verification page
-
-Serve the repository root with any local static HTTP server, then open:
+Then open:
 
 ```text
-reference-implementation/web/index.html
+http://127.0.0.1:8080/verify?subject=tl%3Asubject%3Aapple-2026-0001
 ```
 
-The page renders the demonstration bundle and exposes a portable verification URL suitable for QR encoding by a merchant, label system, or deployment pipeline.
+## What integrity does — and does not — prove
 
-## Interoperability direction / 互操作方向
+A matching SHA-256 digest demonstrates that the bytes retrieved by the verifier match the bytes whose digest was recorded.
 
-Trust & Life intends to remain compatible, where appropriate, with widely used open or industry standards rather than replacing them.
+It does **not** prove that:
 
-- **GS1 EPCIS / CBV** can provide a foundation for interoperable supply-chain visibility events, including sensor and certification-related data.
-- **W3C Verifiable Credentials** can provide a foundation for machine-verifiable attestations issued by inspectors, laboratories, organizations, or other authorized parties.
-- Domain standards and regulatory frameworks may be referenced by Trust & Life conformance profiles, but copyrighted standards text should not be copied into this repository without permission.
+- the underlying event actually happened as described;
+- no relevant event was omitted;
+- the evidence source was competent or honest;
+- a product is legally compliant or absolutely safe.
 
-These references do not imply endorsement by GS1, W3C, ISO, any laboratory, regulator, or certification body.
+Trust & Life therefore keeps integrity, provenance, independent verification, incidents, and domain requirements as separate layers.
 
-## Repository map / 仓库结构
+## Interoperability
+
+See [`interoperability/`](interoperability/).
+
+- **GS1 EPCIS 2.0.1 / CBV 2.0.0** are the preferred direction for interoperable supply-chain visibility events and sensor information.
+- **W3C Verifiable Credentials Data Model 2.0** is the stable target for portable issuer attestations.
+
+The repository references external standards but does not claim endorsement by GS1, W3C, ISO, regulators, laboratories, or certification bodies.
+
+## Repository map
 
 ```text
 trust-life-protocol/
-├── README.md
-├── GOVERNANCE.md
-├── CONTRIBUTING.md
-├── CODE_OF_CONDUCT.md
-├── docs/
-│   ├── philosophy.md
-│   ├── trust-model.md
-│   ├── privacy-principles.md
-│   └── terminology.md
 ├── standards/
-│   ├── core/TL-CORE-001.md
-│   └── food-production/TL-FOOD-001.md
 ├── schemas/
-│   ├── bundle.schema.json
-│   └── *.schema.json
-├── examples/
-│   └── apple-supply-chain/
+├── interoperability/
+├── examples/apple-supply-chain/
+│   ├── evidence/
+│   ├── credentials/
+│   └── epcis/
 ├── registry/
 ├── reference-implementation/
 │   ├── verifier.js
-│   ├── package.json
+│   ├── vc-check.js
+│   ├── server.js
 │   └── web/
 └── marketplace/
 ```
 
-## Project scope: v0.1
+## Project boundary
 
-The v0.1 milestone establishes the first protocol-to-prototype loop:
+Not part of v0.2: payment processing, a full e-commerce marketplace, proprietary hardware, mandatory blockchain infrastructure, real-world credential signing/key management, private-evidence authorization, or formal regulatory certification.
 
-- trust and evidence model;
-- food-production transparency profile;
-- machine-readable schemas;
-- example supply-chain bundle;
-- semantic validation;
-- public consumer-facing verification view.
-
-**Not required for v0.1:** payment processing, a full e-commerce marketplace, proprietary hardware, mandatory blockchain infrastructure, real-world certification services, or claims of formal regulatory certification.
-
-## Standards development
-
-Normative requirements live under [`standards/`](standards/). Changes should be versioned, discussed publicly, and separated from commercial interests. See [`GOVERNANCE.md`](GOVERNANCE.md) and [`CONTRIBUTING.md`](CONTRIBUTING.md).
+Normative requirements live under [`standards/`](standards/). See [`GOVERNANCE.md`](GOVERNANCE.md) and [`CONTRIBUTING.md`](CONTRIBUTING.md) for project governance.
 
 ## Status
 
-**v0.1 draft prototype.** The protocol and reference implementation are suitable for discussion, experimentation, and interoperability design. Nothing in this repository constitutes a legal certification, regulatory approval, food-safety guarantee, professional audit opinion, or endorsement of a real product.
+**v0.2 draft reference implementation.** Suitable for protocol discussion, prototyping, interoperability work, and test integrations. Nothing in this repository constitutes legal certification, regulatory approval, a food-safety guarantee, professional audit opinion, or endorsement of a real product.
 
 ## License
 
-Code and original project documentation are intended to be openly reusable under the repository license. Third-party standards, trademarks, reports, and evidence remain subject to their own rights and terms.
+Original project code and documentation are openly reusable under the repository license. Third-party standards, trademarks, reports, identifiers, and evidence remain subject to their own rights and terms.

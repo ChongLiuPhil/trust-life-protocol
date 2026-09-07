@@ -1,6 +1,6 @@
 # Trust & Life Machine-Readable Schemas
 
-This directory contains the v0.1 JSON Schema vocabulary for portable Trust & Life verification bundles.
+This directory contains the **v0.2** JSON Schema vocabulary for portable Trust & Life verification bundles.
 
 ## Core objects
 
@@ -8,13 +8,13 @@ This directory contains the v0.1 JSON Schema vocabulary for portable Trust & Lif
 - `subject.schema.json` — products, batches, facilities, shipments, processes, or services
 - `claim.schema.json` — scoped statements mapped to normative requirements
 - `evidence.schema.json` — evidence metadata and integrity references
-- `verification.schema.json` — verification actions and states
+- `verification.schema.json` — verification actions, states, and optional credential references
 - `incident.schema.json` — public review / incident lifecycle
 - `conformance.schema.json` — profile-level conformance statements
 - `bundle.schema.json` — transport container tying these objects together
 
-JSON Schema validates **shape**. The reference verifier additionally checks cross-object relationships and basic Trust & Life level semantics.
+JSON Schema validates **shape**. The reference verifier additionally checks cross-object relationships, T0–T3 semantics, conformance aggregation, and SHA-256 digests for local evidence files.
 
-Neither validation step establishes factual truth, legal compliance, or food safety.
+Neither schema validation nor digest validation establishes factual truth, legal compliance, or food safety.
 
-Future versions may add explicit mappings to GS1 EPCIS/CBV events and W3C Verifiable Credentials while preserving a technology-neutral Trust & Life trust model.
+Interoperability mappings are documented under [`../interoperability/`](../interoperability/).

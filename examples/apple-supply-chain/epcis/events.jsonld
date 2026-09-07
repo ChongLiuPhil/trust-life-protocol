@@ -1,0 +1,46 @@
+{
+  "@context": [
+    "https://ref.gs1.org/standards/epcis/2.0.0/epcis-context.jsonld",
+    {"tl": "https://trust-life.example/ns#"}
+  ],
+  "type": "EPCISDocument",
+  "schemaVersion": "2.0",
+  "creationDate": "2026-09-03T10:05:00+08:00",
+  "epcisBody": {
+    "eventList": [
+      {
+        "type": "ObjectEvent",
+        "eventTime": "2026-09-01T08:15:00+08:00",
+        "eventTimeZoneOffset": "+08:00",
+        "quantityList": [
+          {"epcClass":"urn:epc:class:lgtin:0614141.107346.A20260901","quantity":100,"uom":"KGM"}
+        ],
+        "action": "ADD",
+        "bizStep": "commissioning",
+        "disposition": "active",
+        "readPoint": {"id":"urn:epc:id:sgln:0614141.00001.0"},
+        "bizLocation": {"id":"urn:epc:id:sgln:0614141.00001.0"},
+        "ilmd": {"cbvmda:lot":"A20260901"},
+        "tl:subjectId": "tl:subject:apple-2026-0001",
+        "tl:claimIds": ["tl:claim:production-records"]
+      },
+      {
+        "type": "ObjectEvent",
+        "eventTime": "2026-09-02T11:00:00+08:00",
+        "eventTimeZoneOffset": "+08:00",
+        "quantityList": [
+          {"epcClass":"urn:epc:class:lgtin:0614141.107346.A20260901","quantity":100,"uom":"KGM"}
+        ],
+        "action": "OBSERVE",
+        "bizStep": "shipping",
+        "disposition": "in_transit",
+        "readPoint": {"id":"urn:epc:id:sgln:0614141.00002.0"},
+        "sensorElementList": [
+          {"sensorReport":[{"type":"Temperature","minValue":4.1,"maxValue":4.4,"uom":"CEL"}]}
+        ],
+        "tl:subjectId": "tl:subject:shipment-2026-0001",
+        "tl:claimIds": ["tl:claim:cold-chain"]
+      }
+    ]
+  }
+}

@@ -1,8 +1,24 @@
 # Registry
 
-The Trust & Life protocol does not require one central registry. This directory documents the minimum behavior expected from registry implementations.
+The Trust & Life protocol does not require one central registry. A registry is a discoverability and presentation layer over portable evidence and attestations, not the ultimate source of truth.
 
-A registry may publish information about participating organizations, facilities, products, profiles, evidence status, verifier attestations, and incidents. Different organizations may operate interoperable registries.
+## v0.2 reference API
+
+The dependency-free reference server implements a minimal read-only API documented in [`openapi.yaml`](openapi.yaml):
+
+- `GET /health`
+- `GET /v1/subjects`
+- `GET /v1/subjects/{subjectId}`
+- `GET /verify?subject=...` for the consumer-facing verification view
+
+Run it with:
+
+```bash
+cd reference-implementation
+npm run serve
+```
+
+The example registry index is [`demo-registry.json`](demo-registry.json).
 
 ## Registry principles
 
@@ -10,22 +26,16 @@ A conforming registry SHOULD:
 
 - expose the exact specification/profile version used for each conformance result;
 - use stable identifiers for subjects and records;
-- show whether data are self-declared, evidence-backed, continuously observable, or independently verified;
-- expose material evidence gaps and expiration states;
-- retain visible supersession/correction history for trust-sensitive records;
+- show whether information is self-declared, evidence-backed, continuously observable, or independently verified;
+- expose material evidence gaps, validity periods, suspension, revocation, and expiration states;
+- retain visible correction or supersession history for trust-sensitive records;
 - distinguish allegations from verified incidents;
 - publish an appeal/correction mechanism;
-- avoid presenting participation as a permanent endorsement by Trust & Life;
+- avoid presenting participation as permanent endorsement by Trust & Life;
 - provide machine-readable access to non-sensitive public records where practical.
 
-## Decentralization of trust
+## Decentralization
 
-A registry entry is an index into evidence and attestations, not the ultimate source of truth.
+Registries SHOULD support exportable evidence metadata, standardized identifiers, portable credentials, and independently mirrored public records so verification does not depend exclusively on one operator.
 
-Implementations SHOULD make it possible to verify important records without depending exclusively on the continued availability or goodwill of one registry operator.
-
-This may include signed attestations, portable evidence manifests, standardized identifiers, export APIs, or independently mirrored public metadata.
-
-## Commercial neutrality
-
-A marketplace MAY operate a registry, but marketplace ranking, advertising, commission arrangements, or commercial partnership MUST NOT silently alter the meaning of protocol conformance.
+A marketplace MAY operate a registry, but commercial ranking, advertising, commission arrangements, or partnership MUST NOT silently change the meaning of protocol conformance.

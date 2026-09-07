@@ -1,0 +1,53 @@
+openapi: 3.1.0
+info:
+  title: Trust & Life Read-only Registry API
+  version: 0.2.0
+  description: >-
+    Minimal public lookup API for the Trust & Life reference implementation.
+    A registry response describes evidence and verification status; it is not a safety guarantee.
+servers:
+  - url: http://127.0.0.1:8080
+paths:
+  /health:
+    get:
+      operationId: health
+      responses:
+        '200':
+          description: Service status
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [ok]
+                properties:
+                  ok: {type: boolean}
+  /v1/subjects:
+    get:
+      operationId: listSubjects
+      responses:
+        '200':
+          description: Public subjects
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items: {type: object}
+  /v1/subjects/{subjectId}:
+    get:
+      operationId: getSubjectVerification
+      parameters:
+        - in: path
+          name: subjectId
+          required: true
+          schema: {type: string}
+      responses:
+        '200':
+          description: Consumer-oriented verification view
+          content:
+            application/json:
+              schema: {type: object}
+        '404':
+          description: Subject not found
