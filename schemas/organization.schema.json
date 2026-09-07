@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://trustlife.example/schemas/organization.schema.json",
+  "title": "Trust & Life Organization",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "name", "type", "jurisdiction"],
+  "properties": {
+    "id": {"type": "string", "pattern": "^tl:org:[A-Za-z0-9._:-]+$"},
+    "name": {"type": "string", "minLength": 1},
+    "type": {"type": "string", "enum": ["producer", "processor", "logistics", "retailer", "laboratory", "inspector", "platform", "other"]},
+    "jurisdiction": {"type": "string", "minLength": 2},
+    "website": {"type": "string", "format": "uri"},
+    "identifiers": {"type": "object", "additionalProperties": {"type": "string"}},
+    "publicContact": {"type": "string"}
+  }
+}

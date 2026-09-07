@@ -1,0 +1,1 @@
+{"recordType":"observation-manifest","subject":"tl:subject:apple-2026-0001","interval":{"from":"2026-09-01T07:00:00+08:00","to":"2026-09-01T12:00:00+08:00"},"coverage":"declared harvest process area","privacy":{"audio":false,"faceRedaction":true},"segments":5,"note":"No actual video is stored in this demonstration."}

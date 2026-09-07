@@ -1,0 +1,10 @@
+{
+  "name": "trust-life-reference-implementation",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Minimal dependency-free Trust & Life semantic verifier",
+  "type": "module",
+  "scripts": {
+    "verify:demo": "node verifier.js ../examples/apple-supply-chain/trust-bundle.json"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://trustlife.example/schemas/evidence.schema.json",
+  "title": "Trust & Life Evidence Record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "subjectId", "category", "sourceOrganizationId", "capturedAt", "uri", "integrity"],
+  "properties": {
+    "id": {"type": "string", "pattern": "^tl:evidence:[A-Za-z0-9._:-]+$"},
+    "subjectId": {"type": "string", "pattern": "^tl:subject:"},
+    "category": {"type": "string", "enum": ["document", "photo", "video", "sensor", "laboratory-report", "continuous-observation", "supply-chain-event", "credential", "other"]},
+    "sourceOrganizationId": {"type": "string", "pattern": "^tl:org:"},
+    "capturedAt": {"type": "string", "format": "date-time"},
+    "uri": {"type": "string", "format": "uri-reference"},
+    "mediaType": {"type": "string"},
+    "integrity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["algorithm", "digest"],
+      "properties": {
+        "algorithm": {"type": "string", "enum": ["sha256"]},
+        "digest": {"type": "string", "pattern": "^[a-fA-F0-9]{64}$"},
+        "signature": {"type": "string"},
+        "anchoringUri": {"type": "string", "format": "uri"}
+      }
+    },
+    "privacy": {"type": "string", "enum": ["public", "redacted-public", "restricted-verifier"]},
+    "notes": {"type": "string"}
+  }
+}

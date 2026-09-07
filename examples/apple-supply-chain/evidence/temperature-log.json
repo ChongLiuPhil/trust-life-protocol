@@ -1,0 +1,1 @@
+{"recordType":"sensor-series","shipment":"tl:subject:shipment-2026-0001","unit":"Cel","observations":[{"at":"2026-09-02T09:00:00+08:00","value":4.2},{"at":"2026-09-02T10:00:00+08:00","value":4.4},{"at":"2026-09-02T11:00:00+08:00","value":4.1}],"note":"Synthetic demonstration data; thresholds are intentionally not evaluated."}

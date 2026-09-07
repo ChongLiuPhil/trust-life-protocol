@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://trustlife.example/schemas/verification.schema.json",
+  "title": "Trust & Life Verification",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "claimId", "verifierOrganizationId", "method", "status", "verifiedAt"],
+  "properties": {
+    "id": {"type": "string", "pattern": "^tl:verification:[A-Za-z0-9._:-]+$"},
+    "claimId": {"type": "string", "pattern": "^tl:claim:"},
+    "verifierOrganizationId": {"type": "string", "pattern": "^tl:org:"},
+    "method": {"type": "string", "enum": ["self-review", "document-review", "remote-review", "on-site-inspection", "laboratory-test", "credential-verification", "automated-integrity-check", "other"]},
+    "status": {"type": "string", "enum": ["pending", "verified", "rejected", "expired", "revoked"]},
+    "verifiedAt": {"type": "string", "format": "date-time"},
+    "validUntil": {"type": "string", "format": "date-time"},
+    "reportUri": {"type": "string", "format": "uri-reference"},
+    "notes": {"type": "string"}
+  }
+}

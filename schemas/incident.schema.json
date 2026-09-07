@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://trustlife.example/schemas/incident.schema.json",
+  "title": "Trust & Life Incident",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "subjectId", "reportedAt", "status", "summary"],
+  "properties": {
+    "id": {"type": "string", "pattern": "^tl:incident:[A-Za-z0-9._:-]+$"},
+    "subjectId": {"type": "string", "pattern": "^tl:subject:"},
+    "reportedAt": {"type": "string", "format": "date-time"},
+    "reportedBy": {"type": "string"},
+    "status": {"type": "string", "enum": ["reported", "triage", "under-review", "substantiated", "not-substantiated", "resolved", "appealed"]},
+    "severity": {"type": "string", "enum": ["informational", "low", "medium", "high", "critical"]},
+    "summary": {"type": "string", "minLength": 1},
+    "evidenceIds": {"type": "array", "items": {"type": "string", "pattern": "^tl:evidence:"}},
+    "resolution": {"type": "string"},
+    "resolvedAt": {"type": "string", "format": "date-time"}
+  }
+}

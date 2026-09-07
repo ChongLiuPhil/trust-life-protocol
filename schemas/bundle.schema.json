@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://trustlife.example/schemas/bundle.schema.json",
+  "title": "Trust & Life Verification Bundle",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["bundleVersion", "organizations", "subjects", "claims", "evidence", "verifications", "incidents", "conformance"],
+  "properties": {
+    "bundleVersion": {"const": "0.1"},
+    "organizations": {"type": "array", "items": {"$ref": "organization.schema.json"}},
+    "subjects": {"type": "array", "items": {"$ref": "subject.schema.json"}},
+    "claims": {"type": "array", "items": {"$ref": "claim.schema.json"}},
+    "evidence": {"type": "array", "items": {"$ref": "evidence.schema.json"}},
+    "verifications": {"type": "array", "items": {"$ref": "verification.schema.json"}},
+    "incidents": {"type": "array", "items": {"$ref": "incident.schema.json"}},
+    "conformance": {"type": "array", "items": {"$ref": "conformance.schema.json"}}
+  }
+}

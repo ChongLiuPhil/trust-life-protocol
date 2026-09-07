@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://trustlife.example/schemas/subject.schema.json",
+  "title": "Trust & Life Subject",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "kind", "name", "organizationId"],
+  "properties": {
+    "id": {"type": "string", "pattern": "^tl:subject:[A-Za-z0-9._:-]+$"},
+    "kind": {"type": "string", "enum": ["product", "batch", "facility", "shipment", "process", "service"]},
+    "name": {"type": "string", "minLength": 1},
+    "organizationId": {"type": "string", "pattern": "^tl:org:"},
+    "parentSubjectId": {"type": "string", "pattern": "^tl:subject:"},
+    "lotCode": {"type": "string"},
+    "productionDate": {"type": "string", "format": "date"},
+    "expiresAt": {"type": "string", "format": "date-time"}
+  }
+}

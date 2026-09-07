@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://trustlife.example/schemas/conformance.schema.json",
+  "title": "Trust & Life Conformance Statement",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "subjectId", "profile", "profileVersion", "level", "status", "evaluatedAt", "claimIds"],
+  "properties": {
+    "id": {"type": "string", "pattern": "^tl:conformance:[A-Za-z0-9._:-]+$"},
+    "subjectId": {"type": "string", "pattern": "^tl:subject:"},
+    "profile": {"type": "string", "pattern": "^TL-[A-Z]+-[0-9]{3}$"},
+    "profileVersion": {"type": "string"},
+    "level": {"type": "string", "enum": ["T0", "T1", "T2", "T3"]},
+    "status": {"type": "string", "enum": ["draft", "conformant", "nonconformant", "suspended", "expired"]},
+    "evaluatedAt": {"type": "string", "format": "date-time"},
+    "validUntil": {"type": "string", "format": "date-time"},
+    "claimIds": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "pattern": "^tl:claim:"}},
+    "limitations": {"type": "array", "items": {"type": "string"}}
+  }
+}

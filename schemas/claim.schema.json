@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://trustlife.example/schemas/claim.schema.json",
+  "title": "Trust & Life Claim",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "subjectId", "requirementId", "statement", "level", "evidenceIds", "verificationIds"],
+  "properties": {
+    "id": {"type": "string", "pattern": "^tl:claim:[A-Za-z0-9._:-]+$"},
+    "subjectId": {"type": "string", "pattern": "^tl:subject:"},
+    "requirementId": {"type": "string", "minLength": 3},
+    "statement": {"type": "string", "minLength": 1},
+    "level": {"type": "string", "enum": ["T0", "T1", "T2", "T3"]},
+    "evidenceIds": {"type": "array", "uniqueItems": true, "items": {"type": "string", "pattern": "^tl:evidence:"}},
+    "verificationIds": {"type": "array", "uniqueItems": true, "items": {"type": "string", "pattern": "^tl:verification:"}},
+    "validFrom": {"type": "string", "format": "date-time"},
+    "validUntil": {"type": "string", "format": "date-time"},
+    "limitations": {"type": "array", "items": {"type": "string"}}
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "bundleVersion": "0.1",
+  "organizations": [
+    {"id":"tl:org:green-orchard","name":"Green Orchard Cooperative (Demo)","type":"producer","jurisdiction":"CN-SD"},
+    {"id":"tl:org:coldway","name":"ColdWay Logistics (Demo)","type":"logistics","jurisdiction":"CN-SD"},
+    {"id":"tl:org:clearcheck-lab","name":"ClearCheck Laboratory (Demo)","type":"laboratory","jurisdiction":"CN-SD"},
+    {"id":"tl:org:trustlife-demo","name":"Trust & Life Demo Verifier","type":"platform","jurisdiction":"GLOBAL"}
+  ],
+  "subjects": [
+    {"id":"tl:subject:apple-2026-0001","kind":"batch","name":"Demo Apple Batch A20260901","organizationId":"tl:org:green-orchard","lotCode":"A20260901","productionDate":"2026-09-01"},
+    {"id":"tl:subject:shipment-2026-0001","kind":"shipment","name":"Demo Cold-chain Shipment S20260902","organizationId":"tl:org:coldway","parentSubjectId":"tl:subject:apple-2026-0001"}
+  ],
+  "claims": [
+    {"id":"tl:claim:production-records","subjectId":"tl:subject:apple-2026-0001","requirementId":"TL-FOOD-001-R020","statement":"Production and batch records are linked to this batch.","level":"T1","evidenceIds":["tl:evidence:harvest-record"],"verificationIds":["tl:verification:record-integrity"],"limitations":["Demo data only; no real-world safety claim."]},
+    {"id":"tl:claim:continuous-observation","subjectId":"tl:subject:apple-2026-0001","requirementId":"TL-CORE-001-R020","statement":"A declared production area has continuous process-observation evidence for the stated interval.","level":"T2","evidenceIds":["tl:evidence:orchard-observation"],"verificationIds":["tl:verification:observation-integrity"],"limitations":["Camera coverage is limited to the declared process area and does not imply complete observation of all activity."]},
+    {"id":"tl:claim:lab-screening","subjectId":"tl:subject:apple-2026-0001","requirementId":"TL-FOOD-001-R060","statement":"A demo laboratory report is independently attributed to the laboratory organization.","level":"T3","evidenceIds":["tl:evidence:lab-report"],"verificationIds":["tl:verification:lab-report-review"],"limitations":["Illustrative report; not a real laboratory result."]},
+    {"id":"tl:claim:cold-chain","subjectId":"tl:subject:shipment-2026-0001","requirementId":"TL-FOOD-001-R070","statement":"Temperature observations were recorded for the declared shipment interval.","level":"T2","evidenceIds":["tl:evidence:temperature-log"],"verificationIds":["tl:verification:temperature-integrity"],"limitations":["Demo sensor sequence; no claim about regulatory temperature thresholds."]}
+  ],
+  "evidence": [
+    {"id":"tl:evidence:harvest-record","subjectId":"tl:subject:apple-2026-0001","category":"document","sourceOrganizationId":"tl:org:green-orchard","capturedAt":"2026-09-01T08:15:00+08:00","uri":"evidence/harvest-record.json","mediaType":"application/json","integrity":{"algorithm":"sha256","digest":"1111111111111111111111111111111111111111111111111111111111111111"},"privacy":"public","notes":"Synthetic demonstration record."},
+    {"id":"tl:evidence:orchard-observation","subjectId":"tl:subject:apple-2026-0001","category":"continuous-observation","sourceOrganizationId":"tl:org:green-orchard","capturedAt":"2026-09-01T07:00:00+08:00","uri":"evidence/observation-manifest.json","mediaType":"application/json","integrity":{"algorithm":"sha256","digest":"2222222222222222222222222222222222222222222222222222222222222222"},"privacy":"redacted-public","notes":"Synthetic manifest; worker-identifying content is not included."},
+    {"id":"tl:evidence:lab-report","subjectId":"tl:subject:apple-2026-0001","category":"laboratory-report","sourceOrganizationId":"tl:org:clearcheck-lab","capturedAt":"2026-09-01T16:30:00+08:00","uri":"evidence/lab-report.json","mediaType":"application/json","integrity":{"algorithm":"sha256","digest":"3333333333333333333333333333333333333333333333333333333333333333"},"privacy":"public","notes":"Synthetic demonstration report; not a real test."},
+    {"id":"tl:evidence:temperature-log","subjectId":"tl:subject:shipment-2026-0001","category":"sensor","sourceOrganizationId":"tl:org:coldway","capturedAt":"2026-09-02T09:00:00+08:00","uri":"evidence/temperature-log.json","mediaType":"application/json","integrity":{"algorithm":"sha256","digest":"4444444444444444444444444444444444444444444444444444444444444444"},"privacy":"public","notes":"Synthetic sensor series."}
+  ],
+  "verifications": [
+    {"id":"tl:verification:record-integrity","claimId":"tl:claim:production-records","verifierOrganizationId":"tl:org:trustlife-demo","method":"automated-integrity-check","status":"verified","verifiedAt":"2026-09-03T10:00:00+08:00"},
+    {"id":"tl:verification:observation-integrity","claimId":"tl:claim:continuous-observation","verifierOrganizationId":"tl:org:trustlife-demo","method":"automated-integrity-check","status":"verified","verifiedAt":"2026-09-03T10:01:00+08:00"},
+    {"id":"tl:verification:lab-report-review","claimId":"tl:claim:lab-screening","verifierOrganizationId":"tl:org:clearcheck-lab","method":"laboratory-test","status":"verified","verifiedAt":"2026-09-01T16:40:00+08:00","validUntil":"2026-10-01T16:40:00+08:00"},
+    {"id":"tl:verification:temperature-integrity","claimId":"tl:claim:cold-chain","verifierOrganizationId":"tl:org:trustlife-demo","method":"automated-integrity-check","status":"verified","verifiedAt":"2026-09-03T10:02:00+08:00"}
+  ],
+  "incidents": [],
+  "conformance": [
+    {"id":"tl:conformance:apple-2026-0001","subjectId":"tl:subject:apple-2026-0001","profile":"TL-FOOD-001","profileVersion":"0.1","level":"T3","status":"conformant","evaluatedAt":"2026-09-03T10:10:00+08:00","validUntil":"2026-10-01T16:40:00+08:00","claimIds":["tl:claim:production-records","tl:claim:continuous-observation","tl:claim:lab-screening"],"limitations":["This repository example contains synthetic data and MUST NOT be represented as a real food-safety certification."]}
+  ]
+}
