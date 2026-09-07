@@ -1,0 +1,5 @@
+requirement_id,claim_id,evidence_id,evidence_category,source_organization_id,source_system,visibility,retention_status,integrity_method,independent_verifier_id,refresh_or_validity,known_gaps,public_explanation
+FP-PRODUCT-TRACE-010,REPLACE,REPLACE,document,REPLACE,REPLACE,public,retained,sha256,,REPLACE,REPLACE,REPLACE
+FP-OBSERVABILITY-020,REPLACE,REPLACE,continuous-observation,REPLACE,REPLACE,restricted,retained,signed-manifest,,REPLACE,REPLACE,REPLACE
+FP-LAB-030,REPLACE,REPLACE,laboratory-report,REPLACE,REPLACE,restricted,retained,credential-signature,REPLACE,REPLACE,REPLACE,REPLACE
+FP-HANDOFF-040,REPLACE,REPLACE,sensor,REPLACE,REPLACE,public-or-redacted,retained,sha256,,REPLACE,REPLACE,REPLACE
