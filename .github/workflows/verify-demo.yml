@@ -1,4 +1,4 @@
-name: Verify v0.3 cryptographic federation
+name: Verify v0.4 pilot onboarding and conformance
 
 on:
   push:
@@ -18,10 +18,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Verify integrity, signatures, status and trust semantics
+      - name: Verify integrity, signatures, onboarding, positive and negative conformance paths
         working-directory: reference-implementation
         run: npm run verify
-      - name: Smoke-test registry and federation API
+      - name: Smoke-test registry, federation, onboarding and QR API
         working-directory: reference-implementation
         run: |
           node server.js >/tmp/trust-life-server.log 2>&1 &
@@ -29,8 +29,16 @@ jobs:
           trap 'kill $pid' EXIT
           sleep 1
           curl --fail --silent http://127.0.0.1:8080/health
-          curl --fail --silent 'http://127.0.0.1:8080/v1/subjects/tl%3Asubject%3Aapple-2026-0001'
           curl --fail --silent http://127.0.0.1:8080/.well-known/trust-life-registry
           curl --fail --silent http://127.0.0.1:8080/v1/federation
           curl --fail --silent http://127.0.0.1:8080/v1/keys
+          curl --fail --silent http://127.0.0.1:8080/v1/profiles
+          curl --fail --silent http://127.0.0.1:8080/v1/profiles/TL-FRESH-PRODUCE-001
+          curl --fail --silent http://127.0.0.1:8080/v1/onboarding
+          curl --fail --silent 'http://127.0.0.1:8080/v1/onboarding/tl%3Aonboarding%3Agreen-orchard-2026-pilot'
+          curl --fail --silent 'http://127.0.0.1:8080/v1/onboarding/tl%3Aonboarding%3Agreen-orchard-2026-pilot/assessment'
+          curl --fail --silent 'http://127.0.0.1:8080/v1/subjects/tl%3Asubject%3Aapple-2026-0001'
+          curl --fail --silent 'http://127.0.0.1:8080/v1/subjects/tl%3Asubject%3Aapple-2026-0001/assessment'
+          curl --fail --silent 'http://127.0.0.1:8080/v1/qr/tl%3Asubject%3Aapple-2026-0001'
+          curl --fail --silent --location 'http://127.0.0.1:8080/r/tl%3Asubject%3Aapple-2026-0001' >/dev/null
           curl --fail --silent 'http://127.0.0.1:8080/v1/credentials/urn%3Auuid%3A9bca26a6-d31c-45e0-91fd-c2bf7f0b8a01/status'
