@@ -1,0 +1,14 @@
+{
+  "pilotId": "tl:pilot:apple-demo-2026-01",
+  "profileId": "TL-FRESH-PRODUCE-001",
+  "applicationId": "tl:onboarding:green-orchard-demo",
+  "state": "suspended",
+  "updatedAt": "2026-09-07T13:00:00Z",
+  "publicProjectionAllowed": false,
+  "currentAssessmentDecision": "suspended",
+  "reason": "Synthetic fixture demonstrates emergency suspension after a trust-sensitive condition.",
+  "history": [
+    {"at":"2026-09-04T06:00:00Z","state":"live","actorRole":"pilot-operator","reason":"Synthetic public projection enabled."},
+    {"at":"2026-09-07T13:00:00Z","state":"suspended","actorRole":"security-operator","reason":"Synthetic trust-sensitive incident requires review before republication."}
+  ]
+}
