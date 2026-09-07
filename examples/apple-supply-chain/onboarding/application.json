@@ -1,0 +1,42 @@
+{
+  "applicationVersion": "0.4",
+  "id": "tl:onboarding:green-orchard-2026-pilot",
+  "applicantOrganizationId": "tl:org:green-orchard",
+  "profileId": "TL-FRESH-PRODUCE-001",
+  "profileVersion": "0.4.0",
+  "submittedAt": "2026-09-07T11:40:00Z",
+  "publicDisplayName": "Green Orchard Fresh Produce Pilot (Synthetic)",
+  "scope": {
+    "facilitySubjectIds": ["tl:subject:green-orchard-demo-facility"],
+    "coveredSubjectIds": ["tl:subject:apple-2026-0001", "tl:subject:shipment-2026-0001"],
+    "activities": ["primary-production", "harvest", "dispatch", "condition-observed-transport"],
+    "jurisdictions": ["CN-SD"],
+    "validFrom": "2026-09-01T00:00:00Z",
+    "validUntil": "2026-10-01T00:00:00Z"
+  },
+  "declarations": {
+    "privacyNoticePublished": true,
+    "dataMinimizationReviewed": true,
+    "prohibitedPrivateAreaMonitoringExcluded": true,
+    "correctionProcessAvailable": true,
+    "appealProcessAvailable": true,
+    "portableVerificationLinkPlanned": true
+  },
+  "requirementResponses": [
+    {"requirementId":"FP-ID-SCOPE-001","response":"declared","justification":"Organization, facility, batch, and linked shipment scope are explicitly identified."},
+    {"requirementId":"FP-PRODUCT-TRACE-010","response":"mapped","claimIds":["tl:claim:production-records"],"evidenceIds":["tl:evidence:harvest-record"]},
+    {"requirementId":"FP-OBSERVABILITY-020","response":"mapped","claimIds":["tl:claim:continuous-observation"],"evidenceIds":["tl:evidence:orchard-observation"]},
+    {"requirementId":"FP-LAB-030","response":"mapped","claimIds":["tl:claim:lab-screening"],"evidenceIds":["tl:evidence:lab-report"]},
+    {"requirementId":"FP-HANDOFF-040","response":"mapped","claimIds":["tl:claim:cold-chain"],"evidenceIds":["tl:evidence:temperature-log"]},
+    {"requirementId":"FP-INCIDENT-050","response":"declared","justification":"The demo bundle currently contains no incidents in the covered scope."},
+    {"requirementId":"FP-PRIVACY-060","response":"declared","justification":"Synthetic pilot declares the required monitoring privacy safeguards."},
+    {"requirementId":"FP-DUE-PROCESS-070","response":"declared","justification":"Correction and appeal routes are represented in the onboarding record."},
+    {"requirementId":"FP-DIGITAL-LINK-080","response":"declared","justification":"The reference Registry exposes a stable QR-target resolver path."}
+  ],
+  "publicChannels": {
+    "correction": "trust-life:demo:correction-channel",
+    "appeal": "trust-life:demo:appeal-channel"
+  },
+  "publicationConsent": true,
+  "notes": "Synthetic fixture only. No real business, facility, product, inspection, or food-safety claim is represented."
+}
