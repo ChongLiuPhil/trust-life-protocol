@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://trustlife.example/schemas/onboarding-application.schema.json",
+  "title": "Trust & Life Onboarding Application",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["applicationVersion", "id", "applicantOrganizationId", "profileId", "profileVersion", "submittedAt", "scope", "declarations", "requirementResponses", "publicationConsent"],
+  "properties": {
+    "applicationVersion": {"const": "0.4"},
+    "id": {"type": "string", "pattern": "^tl:onboarding:[A-Za-z0-9._:-]+$"},
+    "applicantOrganizationId": {"type": "string", "pattern": "^tl:org:"},
+    "profileId": {"type": "string", "pattern": "^TL-[A-Z0-9-]+$"},
+    "profileVersion": {"type": "string", "minLength": 1},
+    "submittedAt": {"type": "string", "format": "date-time"},
+    "publicDisplayName": {"type": "string", "minLength": 1},
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["facilitySubjectIds", "coveredSubjectIds", "activities", "jurisdictions"],
+      "properties": {
+        "facilitySubjectIds": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "pattern": "^tl:subject:"}},
+        "coveredSubjectIds": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "pattern": "^tl:subject:"}},
+        "activities": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}},
+        "jurisdictions": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}},
+        "validFrom": {"type": "string", "format": "date-time"},
+        "validUntil": {"type": "string", "format": "date-time"}
+      }
+    },
+    "declarations": {
+      "type": "object",
+      "additionalProperties": {"type": ["boolean", "string", "number", "null"]}
+    },
+    "requirementResponses": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["requirementId", "response"],
+        "properties": {
+          "requirementId": {"type": "string"},
+          "response": {"type": "string", "enum": ["mapped", "declared", "not-applicable", "pending"]},
+          "claimIds": {"type": "array", "uniqueItems": true, "items": {"type": "string", "pattern": "^tl:claim:"}},
+          "evidenceIds": {"type": "array", "uniqueItems": true, "items": {"type": "string", "pattern": "^tl:evidence:"}},
+          "justification": {"type": "string"}
+        }
+      }
+    },
+    "restrictedDocumentRefs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "category", "visibility"],
+        "properties": {
+          "id": {"type": "string"},
+          "category": {"type": "string"},
+          "visibility": {"const": "restricted-verifier"},
+          "sha256": {"type": "string", "pattern": "^[a-fA-F0-9]{64}$"},
+          "validUntil": {"type": "string", "format": "date-time"},
+          "reviewStatus": {"type": "string"}
+        }
+      }
+    },
+    "publicChannels": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "correction": {"type": "string"},
+        "appeal": {"type": "string"}
+      }
+    },
+    "publicationConsent": {"type": "boolean"},
+    "notes": {"type": "string"}
+  }
+}
