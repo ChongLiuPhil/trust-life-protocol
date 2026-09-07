@@ -1,0 +1,113 @@
+{
+  "profileSchemaVersion": "0.4",
+  "id": "TL-FRESH-PRODUCE-001",
+  "version": "0.4.0",
+  "status": "pilot",
+  "title": "Fresh Produce Transparency Pilot Baseline",
+  "description": "A limited Trust & Life transparency/onboarding baseline for fresh-produce pilots. It is not a complete food-safety standard or regulatory certification.",
+  "dependsOn": ["TL-CORE-001", "TL-FOOD-001", "TL-ONBOARD-001", "TL-CONF-001"],
+  "requirements": [
+    {
+      "id": "FP-ID-SCOPE-001",
+      "title": "Scoped organization, facility, and covered subjects",
+      "class": "blocking",
+      "method": "application-fields",
+      "requiredFields": ["applicantOrganizationId", "scope.facilitySubjectIds", "scope.coveredSubjectIds"],
+      "sourceRequirements": ["TL-FOOD-001-R010", "TL-FOOD-001-R011", "TL-FOOD-001-R012"],
+      "publicExplanation": "The public result must say exactly which organization, facility scope, and product/batch/shipment scope it covers."
+    },
+    {
+      "id": "FP-PRODUCT-TRACE-010",
+      "title": "Product or batch traceability evidence",
+      "class": "blocking",
+      "method": "claim",
+      "claimRequirementIds": ["TL-FOOD-001-R020"],
+      "minimumLevel": "T1",
+      "evidenceAnyOf": ["document", "supply-chain-event"],
+      "sourceRequirements": ["TL-FOOD-001-R020", "TL-FOOD-001-R021", "TL-FOOD-001-R022"],
+      "publicExplanation": "A covered product or batch must be linked to inspectable traceability evidence."
+    },
+    {
+      "id": "FP-OBSERVABILITY-020",
+      "title": "Declared process-observation plan and evidence",
+      "class": "blocking",
+      "method": "claim",
+      "claimRequirementIds": ["TL-FOOD-001-R050"],
+      "minimumLevel": "T2",
+      "evidenceAnyOf": ["continuous-observation", "sensor"],
+      "sourceRequirements": ["TL-FOOD-001-R050", "TL-FOOD-001-R051", "TL-FOOD-001-R052", "TL-FOOD-001-R053"],
+      "publicExplanation": "Observed stages, coverage, blind spots, and outages must be stated rather than implied to be complete."
+    },
+    {
+      "id": "FP-LAB-030",
+      "title": "Independent laboratory or inspection attestation",
+      "class": "blocking",
+      "method": "claim",
+      "claimRequirementIds": ["TL-FOOD-001-R070"],
+      "minimumLevel": "T3",
+      "evidenceAnyOf": ["laboratory-report"],
+      "requiresIndependentVerification": true,
+      "sourceRequirements": ["TL-FOOD-001-R070", "TL-FOOD-001-R071", "TL-FOOD-001-R072", "TL-FOOD-001-R073", "TL-FOOD-001-R074"],
+      "publicExplanation": "The pilot requires at least one scoped independent laboratory/inspection claim with visible issuer and validity information."
+    },
+    {
+      "id": "FP-HANDOFF-040",
+      "title": "Condition evidence for a declared logistics handoff",
+      "class": "blocking",
+      "method": "claim",
+      "claimRequirementIds": ["TL-FOOD-001-R080"],
+      "minimumLevel": "T2",
+      "evidenceAnyOf": ["sensor"],
+      "sourceRequirements": ["TL-FOOD-001-R080", "TL-FOOD-001-R081", "TL-FOOD-001-R082"],
+      "publicExplanation": "Where the pilot declares condition-controlled transport, the declared interval must have condition evidence and visible scope limitations."
+    },
+    {
+      "id": "FP-INCIDENT-050",
+      "title": "No unresolved high-severity verified incident in covered scope",
+      "class": "blocking",
+      "method": "incident-policy",
+      "blockingSeverities": ["high", "critical"],
+      "nonBlockingStates": ["resolved", "not-substantiated"],
+      "sourceRequirements": ["TL-CORE-001-R050", "TL-CORE-001-R051", "TL-FOOD-001-R032"],
+      "publicExplanation": "A known unresolved serious verified incident cannot be hidden behind otherwise complete evidence."
+    },
+    {
+      "id": "FP-PRIVACY-060",
+      "title": "Monitoring privacy safeguards declared",
+      "class": "blocking",
+      "method": "declarations",
+      "requiredDeclarationFields": ["privacyNoticePublished", "dataMinimizationReviewed", "prohibitedPrivateAreaMonitoringExcluded"],
+      "sourceRequirements": ["TL-CORE-001-R020", "TL-CORE-001-R021", "TL-CORE-001-R022", "TL-CORE-001-R023", "TL-CORE-001-R025"],
+      "publicExplanation": "Process transparency cannot be implemented by ignoring worker privacy and data minimization."
+    },
+    {
+      "id": "FP-DUE-PROCESS-070",
+      "title": "Correction and appeal routes available",
+      "class": "blocking",
+      "method": "declarations",
+      "requiredDeclarationFields": ["correctionProcessAvailable", "appealProcessAvailable"],
+      "sourceRequirements": ["TL-CORE-001-R052", "TL-CORE-001-R053", "TL-ONBOARD-001-R060", "TL-ONBOARD-001-R061"],
+      "publicExplanation": "A participant must have a route to correct factual errors and challenge material adverse decisions."
+    },
+    {
+      "id": "FP-DIGITAL-LINK-080",
+      "title": "Portable QR/identifier resolution plan",
+      "class": "advisory",
+      "method": "declarations",
+      "requiredDeclarationFields": ["portableVerificationLinkPlanned"],
+      "sourceRequirements": ["TL-CORE-001-R060", "TL-CORE-001-R061"],
+      "publicExplanation": "The pilot should expose a stable verification target that is portable across storefronts and registries."
+    }
+  ],
+  "publicationPolicy": {
+    "readyStates": ["ready", "ready-with-advisories"],
+    "blockingFindingStates": ["gap", "blocked", "manual-review"],
+    "overallLevelRule": "minimum-included-claim",
+    "forbidUniversalTrustScore": true
+  },
+  "limitations": [
+    "This pilot profile evaluates transparency and evidence conditions only.",
+    "It does not replace food-safety law, HACCP-based controls, licensed inspection, laboratory method requirements, or ISO standards.",
+    "Passing this profile must not be marketed as proof that food is absolutely safe."
+  ]
+}
