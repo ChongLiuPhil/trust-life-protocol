@@ -21,7 +21,7 @@ jobs:
       - name: Verify trust chain, onboarding, conformance, lifecycle and publication guard
         working-directory: reference-implementation
         run: npm run verify
-      - name: Smoke-test registry, federation, onboarding and QR API
+      - name: Smoke-test Registry, federation, lifecycle and public projection API
         working-directory: reference-implementation
         run: |
           node server.js >/tmp/trust-life-server.log 2>&1 &
@@ -37,8 +37,11 @@ jobs:
           curl --fail --silent http://127.0.0.1:8080/v1/onboarding
           curl --fail --silent 'http://127.0.0.1:8080/v1/onboarding/tl%3Aonboarding%3Agreen-orchard-2026-pilot'
           curl --fail --silent 'http://127.0.0.1:8080/v1/onboarding/tl%3Aonboarding%3Agreen-orchard-2026-pilot/assessment'
+          curl --fail --silent http://127.0.0.1:8080/v1/pilots
+          curl --fail --silent 'http://127.0.0.1:8080/v1/pilots/tl%3Apilot%3Aapple-demo-2026-01'
           curl --fail --silent 'http://127.0.0.1:8080/v1/subjects/tl%3Asubject%3Aapple-2026-0001'
           curl --fail --silent 'http://127.0.0.1:8080/v1/subjects/tl%3Asubject%3Aapple-2026-0001/assessment'
+          curl --fail --silent 'http://127.0.0.1:8080/v1/public-projection/tl%3Asubject%3Aapple-2026-0001'
           curl --fail --silent 'http://127.0.0.1:8080/v1/qr/tl%3Asubject%3Aapple-2026-0001'
           curl --fail --silent --location 'http://127.0.0.1:8080/r/tl%3Asubject%3Aapple-2026-0001' >/dev/null
           curl --fail --silent 'http://127.0.0.1:8080/v1/credentials/urn%3Auuid%3A9bca26a6-d31c-45e0-91fd-c2bf7f0b8a01/status'
