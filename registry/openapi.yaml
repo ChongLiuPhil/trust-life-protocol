@@ -1,10 +1,13 @@
 openapi: 3.1.0
 info:
   title: Trust & Life Read-only Registry API
-  version: 0.3.0
+  version: 0.4.0
   description: >-
-    Public lookup, signing-key, credential-status, and federation discovery API.
-    Responses expose evidence and trust metadata; they are not safety guarantees.
+    Public lookup, signing-key, credential-status, federation discovery,
+    pilot onboarding, explainable conformance assessment, and QR resolver API.
+    Responses expose scoped evidence and trust metadata; they are not legal
+    certification, professional audit opinions, purchasing recommendations,
+    or safety guarantees.
 servers:
   - url: http://127.0.0.1:8080
 paths:
@@ -23,6 +26,49 @@ paths:
       operationId: getFederation
       responses:
         '200': {description: Local registry and source-preserving peer descriptors}
+  /v1/profiles:
+    get:
+      operationId: listProfiles
+      responses:
+        '200': {description: Published machine-readable profiles}
+  /v1/profiles/{profileId}:
+    get:
+      operationId: getProfile
+      parameters:
+        - in: path
+          name: profileId
+          required: true
+          schema: {type: string}
+      responses:
+        '200': {description: Exact profile/version rules used by the reference evaluator}
+        '404': {description: Profile not found}
+  /v1/onboarding:
+    get:
+      operationId: listOnboardingApplications
+      responses:
+        '200': {description: Public-safe onboarding application summaries}
+  /v1/onboarding/{applicationId}:
+    get:
+      operationId: getOnboardingApplication
+      parameters:
+        - in: path
+          name: applicationId
+          required: true
+          schema: {type: string}
+      responses:
+        '200': {description: Public-safe scoped onboarding record; restricted document content is excluded}
+        '404': {description: Application not found}
+  /v1/onboarding/{applicationId}/assessment:
+    get:
+      operationId: getOnboardingAssessment
+      parameters:
+        - in: path
+          name: applicationId
+          required: true
+          schema: {type: string}
+      responses:
+        '200': {description: Explainable requirement-level pilot assessment}
+        '404': {description: Assessment not found}
   /v1/keys:
     get:
       operationId: listPublicKeys
@@ -54,7 +100,7 @@ paths:
     get:
       operationId: listSubjects
       responses:
-        '200': {description: Public subjects}
+        '200': {description: Public subjects with verification and resolver paths}
   /v1/subjects/{subjectId}:
     get:
       operationId: getSubjectVerification
@@ -64,5 +110,42 @@ paths:
           required: true
           schema: {type: string}
       responses:
-        '200': {description: Consumer verification view including cryptographic checks}
+        '200': {description: Consumer verification view including evidence, cryptographic checks, and pilot findings}
+        '404': {description: Subject not found}
+  /v1/subjects/{subjectId}/assessment:
+    get:
+      operationId: getSubjectAssessment
+      parameters:
+        - in: path
+          name: subjectId
+          required: true
+          schema: {type: string}
+      responses:
+        '200': {description: Pilot assessment whose declared scope includes the subject}
+        '404': {description: Assessment not found}
+  /v1/qr/{subjectId}:
+    get:
+      operationId: getQrTarget
+      parameters:
+        - in: path
+          name: subjectId
+          required: true
+          schema: {type: string}
+      responses:
+        '200': {description: Portable Trust & Life resolver and verification targets for QR encoding}
+        '404': {description: Subject not found}
+  /r/{subjectId}:
+    get:
+      operationId: resolveSubject
+      description: >-
+        Trust & Life demonstration resolver. This path is not itself a GS1
+        Digital Link identifier. Operators with properly assigned GS1 keys may
+        integrate a GS1-conformant resolver separately.
+      parameters:
+        - in: path
+          name: subjectId
+          required: true
+          schema: {type: string}
+      responses:
+        '302': {description: Redirect to the consumer verification view}
         '404': {description: Subject not found}
