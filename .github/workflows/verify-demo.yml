@@ -1,4 +1,4 @@
-name: Verify v0.4 pilot onboarding and conformance
+name: Verify v0.5 field pilot operations
 
 on:
   push:
@@ -18,7 +18,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Verify integrity, signatures, onboarding, positive and negative conformance paths
+      - name: Verify trust chain, onboarding, conformance, lifecycle and publication guard
         working-directory: reference-implementation
         run: npm run verify
       - name: Smoke-test registry, federation, onboarding and QR API
