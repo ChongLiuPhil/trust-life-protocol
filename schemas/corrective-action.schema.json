@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://trustlife.example/schemas/corrective-action.schema.json",
+  "title": "Trust & Life Corrective Action",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "assessmentId", "requirementId", "status", "openedAt", "summary"],
+  "properties": {
+    "id": {"type": "string", "pattern": "^tl:corrective-action:[A-Za-z0-9._:-]+$"},
+    "assessmentId": {"type": "string", "pattern": "^tl:assessment:"},
+    "requirementId": {"type": "string"},
+    "status": {"type": "string", "enum": ["open", "evidence-submitted", "under-review", "accepted", "rejected", "closed"]},
+    "openedAt": {"type": "string", "format": "date-time"},
+    "targetAt": {"type": "string", "format": "date-time"},
+    "closedAt": {"type": "string", "format": "date-time"},
+    "summary": {"type": "string", "minLength": 1},
+    "evidenceIds": {"type": "array", "uniqueItems": true, "items": {"type": "string", "pattern": "^tl:evidence:"}},
+    "resolution": {"type": "string"},
+    "supersedingAssessmentId": {"type": "string", "pattern": "^tl:assessment:"}
+  }
+}
