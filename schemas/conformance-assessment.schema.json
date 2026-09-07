@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://trustlife.example/schemas/conformance-assessment.schema.json",
+  "title": "Trust & Life Conformance Assessment",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["assessmentVersion", "id", "applicationId", "profileId", "profileVersion", "evaluator", "evaluatedAt", "decision", "findings", "blockingGaps", "advisories", "notice"],
+  "properties": {
+    "assessmentVersion": {"const": "0.4"},
+    "id": {"type": "string", "pattern": "^tl:assessment:[A-Za-z0-9._:-]+$"},
+    "applicationId": {"type": "string", "pattern": "^tl:onboarding:"},
+    "profileId": {"type": "string"},
+    "profileVersion": {"type": "string"},
+    "evaluator": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "version"],
+      "properties": {
+        "name": {"type": "string"},
+        "version": {"type": "string"}
+      }
+    },
+    "evaluatedAt": {"type": "string", "format": "date-time"},
+    "decision": {"type": "string", "enum": ["ready", "ready-with-advisories", "not-ready"]},
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["requirementId", "class", "status", "message", "basis"],
+        "properties": {
+          "requirementId": {"type": "string"},
+          "class": {"type": "string", "enum": ["blocking", "advisory", "conditional"]},
+          "status": {"type": "string", "enum": ["pass", "gap", "blocked", "not-applicable", "manual-review"]},
+          "message": {"type": "string"},
+          "basis": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "claimIds": {"type": "array", "items": {"type": "string"}},
+              "evidenceIds": {"type": "array", "items": {"type": "string"}},
+              "verificationIds": {"type": "array", "items": {"type": "string"}},
+              "incidentIds": {"type": "array", "items": {"type": "string"}},
+              "fields": {"type": "array", "items": {"type": "string"}},
+              "missing": {"type": "array", "items": {"type": "string"}}
+            }
+          }
+        }
+      }
+    },
+    "blockingGaps": {"type": "array", "items": {"type": "string"}},
+    "advisories": {"type": "array", "items": {"type": "string"}},
+    "overallEvidenceLevel": {"type": ["string", "null"], "enum": ["T0", "T1", "T2", "T3", null]},
+    "notice": {"type": "string"},
+    "limitations": {"type": "array", "items": {"type": "string"}}
+  }
+}
