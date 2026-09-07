@@ -1,8 +1,8 @@
 {
   "name": "trust-life-reference-implementation",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "private": true,
-  "description": "Dependency-free Trust & Life integrity, federation, onboarding, and explainable conformance reference implementation",
+  "description": "Dependency-free Trust & Life integrity, federation, onboarding, explainable conformance, and field-pilot reference implementation",
   "type": "module",
   "scripts": {
     "verify:demo": "node verifier.js ../examples/apple-supply-chain/trust-bundle.json",
@@ -11,7 +11,10 @@
     "verify:onboarding": "node onboarding-check.js ../examples/apple-supply-chain/onboarding/application.json ../profiles/food-produce/TL-FRESH-PRODUCE-001.profile.json ../examples/apple-supply-chain/trust-bundle.json",
     "assess:pilot": "node conformance-evaluator.js ../examples/apple-supply-chain/onboarding/application.json ../profiles/food-produce/TL-FRESH-PRODUCE-001.profile.json ../examples/apple-supply-chain/trust-bundle.json --expect=ready",
     "assess:gap": "node conformance-evaluator.js ../examples/apple-supply-chain/onboarding/application-gap.json ../profiles/food-produce/TL-FRESH-PRODUCE-001.profile.json ../examples/apple-supply-chain/trust-bundle.json --expect=not-ready",
-    "verify": "npm run verify:demo && npm run verify:vc && npm run verify:crypto && npm run verify:onboarding && npm run assess:pilot && npm run assess:gap",
+    "verify:pilot-state": "node pilot-check.js ../field-pilot/demo-state.json ../field-pilot/demo-suspended-state.json",
+    "export:public": "node public-export.js ../examples/apple-supply-chain/onboarding/application.json ../profiles/food-produce/TL-FRESH-PRODUCE-001.profile.json ../examples/apple-supply-chain/trust-bundle.json ../field-pilot/demo-state.json --expect-allowed=true",
+    "export:suspended": "node public-export.js ../examples/apple-supply-chain/onboarding/application.json ../profiles/food-produce/TL-FRESH-PRODUCE-001.profile.json ../examples/apple-supply-chain/trust-bundle.json ../field-pilot/demo-suspended-state.json --expect-allowed=false",
+    "verify": "npm run verify:demo && npm run verify:vc && npm run verify:crypto && npm run verify:onboarding && npm run assess:pilot && npm run assess:gap && npm run verify:pilot-state && npm run export:public && npm run export:suspended",
     "serve": "node server.js"
   }
 }
