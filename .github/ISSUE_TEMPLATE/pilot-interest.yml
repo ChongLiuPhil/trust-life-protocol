@@ -1,0 +1,70 @@
+name: Field pilot interest
+about: Signal interest in a bounded Trust & Life field pilot without posting sensitive data
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this form only to signal public, non-sensitive interest in a possible field pilot.
+
+        **Do not post** legal IDs, licenses, contracts, private addresses, worker information, private contact details, laboratory originals, security details, credentials, API keys, signing keys, or other confidential material in a public GitHub issue.
+
+        A GitHub issue is not an onboarding application and cannot grant Trust & Life conformance.
+  - type: input
+    id: public-name
+    attributes:
+      label: Public organization/project name
+      description: Use only a name you are already comfortable publishing publicly.
+      placeholder: Example Cooperative
+    validations:
+      required: true
+  - type: dropdown
+    id: role
+    attributes:
+      label: General role
+      options:
+        - Producer / cooperative
+        - Processor
+        - Logistics / warehousing
+        - Retailer / marketplace
+        - Laboratory / verifier
+        - Research / civil society
+        - Software / Registry implementer
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: jurisdiction
+    attributes:
+      label: Country/region (coarse only)
+      description: Do not post a street address or private facility location.
+      placeholder: Example: Shandong, China
+    validations:
+      required: false
+  - type: textarea
+    id: pilot-question
+    attributes:
+      label: What narrow pilot question do you want to test?
+      description: Describe the problem or workflow, not private evidence.
+      placeholder: We want to test whether one batch can be mapped to the fresh-produce pilot profile with manageable evidence burden.
+    validations:
+      required: true
+  - type: textarea
+    id: public-scope
+    attributes:
+      label: Proposed public scope
+      description: Keep this coarse and non-sensitive. Do not identify private workers, exact restricted locations, or confidential suppliers.
+      placeholder: One fruit product, one participating facility, one batch, one outbound shipment.
+    validations:
+      required: true
+  - type: checkboxes
+    id: boundaries
+    attributes:
+      label: Acknowledgements
+      options:
+        - label: I understand this issue is public and I have not included sensitive or confidential data.
+          required: true
+        - label: I understand Trust & Life conformance is not legal certification or a guarantee of product safety.
+          required: true
+        - label: I understand a real pilot requires a separate controlled onboarding process, privacy/security review, and applicable legal/food-safety work.
+          required: true
