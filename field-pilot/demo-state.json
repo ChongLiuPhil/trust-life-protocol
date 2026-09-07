@@ -1,7 +1,7 @@
 {
   "pilotId": "tl:pilot:apple-demo-2026-01",
   "profileId": "TL-FRESH-PRODUCE-001",
-  "applicationId": "tl:onboarding:green-orchard-demo",
+  "applicationId": "tl:onboarding:green-orchard-2026-pilot",
   "state": "live",
   "updatedAt": "2026-09-07T12:30:00Z",
   "publicProjectionAllowed": true,
@@ -10,7 +10,7 @@
   "history": [
     {"at":"2026-09-04T01:00:00Z","state":"intake","actorRole":"pilot-operator","reason":"Synthetic application accepted for intake."},
     {"at":"2026-09-04T02:00:00Z","state":"evidence-mapping","actorRole":"pilot-operator","reason":"Synthetic evidence sources mapped to the pilot profile."},
-    {"at":"2026-09-04T03:00:00Z","state":"preflight","actorRole":"evaluator","reason":"Automated preflight produced no blocking findings.","assessmentId":"tl:assessment:green-orchard-demo"},
+    {"at":"2026-09-04T03:00:00Z","state":"preflight","actorRole":"evaluator","reason":"Automated preflight produced no blocking findings.","assessmentId":"tl:assessment:green-orchard-2026-pilot:0.4.0"},
     {"at":"2026-09-04T04:00:00Z","state":"human-review","actorRole":"qualified-verifier","reason":"Synthetic fixture marked reviewed for workflow demonstration only."},
     {"at":"2026-09-04T05:00:00Z","state":"approved","actorRole":"pilot-operator","reason":"Synthetic go-live gate approved."},
     {"at":"2026-09-04T06:00:00Z","state":"live","actorRole":"pilot-operator","reason":"Synthetic public projection enabled."}
