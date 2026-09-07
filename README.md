@@ -45,8 +45,6 @@ The project is organized around four layers:
 
 ## Conformance levels / 符合性等级
 
-Initial implementations may expose four evidence-strength levels:
-
 | Level | Name | Meaning |
 | --- | --- | --- |
 | **T0** | Declared | Information is self-declared by the organization. |
@@ -55,6 +53,42 @@ Initial implementations may expose four evidence-strength levels:
 | **T3** | Independently Verified | Defined claims or evidence have been reviewed or attested by an independent qualified party. |
 
 A level describes **evidential status**, not a guarantee of product safety or moral perfection.
+
+## v0.1 runnable prototype / 可运行原型
+
+The repository now contains a minimal end-to-end demonstration:
+
+**Organization → Product/Batch → Claims → Evidence → Verification → Incidents → Conformance**
+
+Included in v0.1:
+
+- eight JSON Schemas for the portable trust bundle;
+- a synthetic apple-batch supply-chain example;
+- production-record, continuous-observation, laboratory-report, and temperature-log evidence examples;
+- a dependency-free Node.js semantic verifier;
+- a browser-based public verification page;
+- explicit limitations distinguishing evidence verification from factual truth or food-safety certification.
+
+### Run the demo verifier
+
+```bash
+cd reference-implementation
+npm run verify:demo
+```
+
+The verifier checks references, evidence requirements, basic T0–T3 semantics, independent verification for T3, conformance aggregation warnings, and unresolved incidents.
+
+It does **not** establish factual truth, legal compliance, product safety, or the authenticity of the synthetic example evidence.
+
+### Open the public verification page
+
+Serve the repository root with any local static HTTP server, then open:
+
+```text
+reference-implementation/web/index.html
+```
+
+The page renders the demonstration bundle and exposes a portable verification URL suitable for QR encoding by a merchant, label system, or deployment pipeline.
 
 ## Interoperability direction / 互操作方向
 
@@ -83,23 +117,30 @@ trust-life-protocol/
 │   ├── core/TL-CORE-001.md
 │   └── food-production/TL-FOOD-001.md
 ├── schemas/
+│   ├── bundle.schema.json
+│   └── *.schema.json
 ├── examples/
+│   └── apple-supply-chain/
 ├── registry/
 ├── reference-implementation/
+│   ├── verifier.js
+│   ├── package.json
+│   └── web/
 └── marketplace/
 ```
 
 ## Project scope: v0.1
 
-The first milestone is deliberately small:
+The v0.1 milestone establishes the first protocol-to-prototype loop:
 
-- define the trust and evidence model;
-- define a first food-production transparency profile;
-- define machine-readable schema requirements;
-- demonstrate one product moving through a small example supply chain;
-- provide a public verification page in a later reference implementation.
+- trust and evidence model;
+- food-production transparency profile;
+- machine-readable schemas;
+- example supply-chain bundle;
+- semantic validation;
+- public consumer-facing verification view.
 
-**Not required for v0.1:** payment processing, a full e-commerce marketplace, proprietary hardware, mandatory blockchain infrastructure, or claims of formal regulatory certification.
+**Not required for v0.1:** payment processing, a full e-commerce marketplace, proprietary hardware, mandatory blockchain infrastructure, real-world certification services, or claims of formal regulatory certification.
 
 ## Standards development
 
@@ -107,7 +148,7 @@ Normative requirements live under [`standards/`](standards/). Changes should be 
 
 ## Status
 
-**Early design / v0.1 draft.** Nothing in this repository currently constitutes a legal certification, regulatory approval, food-safety guarantee, or professional audit opinion.
+**v0.1 draft prototype.** The protocol and reference implementation are suitable for discussion, experimentation, and interoperability design. Nothing in this repository constitutes a legal certification, regulatory approval, food-safety guarantee, professional audit opinion, or endorsement of a real product.
 
 ## License
 
