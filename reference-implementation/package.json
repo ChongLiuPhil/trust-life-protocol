@@ -1,14 +1,17 @@
 {
   "name": "trust-life-reference-implementation",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "private": true,
-  "description": "Dependency-free Trust & Life integrity, signature, status, and federation verifier",
+  "description": "Dependency-free Trust & Life integrity, federation, onboarding, and explainable conformance reference implementation",
   "type": "module",
   "scripts": {
     "verify:demo": "node verifier.js ../examples/apple-supply-chain/trust-bundle.json",
     "verify:vc": "node vc-check.js ../examples/apple-supply-chain/credentials/lab-attestation.vc.json",
     "verify:crypto": "node crypto-check.js ../examples/apple-supply-chain/trust-bundle.json",
-    "verify": "npm run verify:demo && npm run verify:vc && npm run verify:crypto",
+    "verify:onboarding": "node onboarding-check.js ../examples/apple-supply-chain/onboarding/application.json ../profiles/food-produce/TL-FRESH-PRODUCE-001.profile.json ../examples/apple-supply-chain/trust-bundle.json",
+    "assess:pilot": "node conformance-evaluator.js ../examples/apple-supply-chain/onboarding/application.json ../profiles/food-produce/TL-FRESH-PRODUCE-001.profile.json ../examples/apple-supply-chain/trust-bundle.json --expect=ready",
+    "assess:gap": "node conformance-evaluator.js ../examples/apple-supply-chain/onboarding/application-gap.json ../profiles/food-produce/TL-FRESH-PRODUCE-001.profile.json ../examples/apple-supply-chain/trust-bundle.json --expect=not-ready",
+    "verify": "npm run verify:demo && npm run verify:vc && npm run verify:crypto && npm run verify:onboarding && npm run assess:pilot && npm run assess:gap",
     "serve": "node server.js"
   }
 }
