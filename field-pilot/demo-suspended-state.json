@@ -1,7 +1,7 @@
 {
   "pilotId": "tl:pilot:apple-demo-2026-01",
   "profileId": "TL-FRESH-PRODUCE-001",
-  "applicationId": "tl:onboarding:green-orchard-demo",
+  "applicationId": "tl:onboarding:green-orchard-2026-pilot",
   "state": "suspended",
   "updatedAt": "2026-09-07T13:00:00Z",
   "publicProjectionAllowed": false,
