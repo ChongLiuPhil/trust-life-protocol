@@ -1,0 +1,42 @@
+{
+  "pilotId": "REPLACE-IN-DEPLOYMENT",
+  "deploymentOwner": {
+    "legalName": "REPLACE-IN-PRIVATE-DEPLOYMENT",
+    "jurisdiction": "REPLACE",
+    "operatorRole": "pilot-operator"
+  },
+  "profile": {
+    "id": "TL-FRESH-PRODUCE-001",
+    "version": "0.4.0"
+  },
+  "scope": {
+    "applicationId": "REPLACE",
+    "organizationId": "REPLACE",
+    "facilitySubjectIds": [],
+    "coveredSubjectIds": [],
+    "validFrom": "REPLACE",
+    "validUntil": "REPLACE"
+  },
+  "roles": {
+    "pilotOperator": "REPLACE-WITH-ROLE-OR-INTERNAL-ID",
+    "qualifiedVerifier": "REPLACE-WITH-INDEPENDENT-ROLE-OR-ORG-ID",
+    "appealsReviewer": "REPLACE-WITH-INDEPENDENT-ROLE-OR-ORG-ID",
+    "securityOperator": "REPLACE-WITH-ROLE-OR-INTERNAL-ID"
+  },
+  "dataStores": {
+    "privateIntake": "DO-NOT-PUBLISH-PATH-OR-CREDENTIALS",
+    "verificationWorkspace": "DO-NOT-PUBLISH-PATH-OR-CREDENTIALS",
+    "publicRegistryBaseUrl": "REPLACE",
+    "auditLog": "DO-NOT-PUBLISH-PATH-OR-CREDENTIALS"
+  },
+  "operations": {
+    "incidentContact": "KEEP-PRIVATE-OR-PUBLISH-GENERIC-CHANNEL",
+    "appealChannel": "REPLACE",
+    "evidenceRefreshCadence": "REPLACE",
+    "assessmentRefreshCadence": "REPLACE",
+    "backupCadence": "REPLACE"
+  },
+  "notes": [
+    "Template only. Do not commit real credentials, worker data, private contacts, secret URLs, or signing keys to the public repository."
+  ]
+}
