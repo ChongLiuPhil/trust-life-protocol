@@ -1,5 +1,6 @@
 name: Field pilot interest
-about: Signal interest in a bounded Trust & Life field pilot without posting sensitive data
+description: Signal interest in a bounded Trust & Life field pilot without posting sensitive data
+title: "[Pilot interest]: "
 labels: []
 body:
   - type: markdown
