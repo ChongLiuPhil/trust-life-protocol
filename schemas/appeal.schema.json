@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://trustlife.example/schemas/appeal.schema.json",
+  "title": "Trust & Life Appeal",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "targetType", "targetId", "filedAt", "status", "grounds"],
+  "properties": {
+    "id": {"type": "string", "pattern": "^tl:appeal:[A-Za-z0-9._:-]+$"},
+    "targetType": {"type": "string", "enum": ["assessment", "finding", "incident", "suspension"]},
+    "targetId": {"type": "string", "minLength": 1},
+    "filedAt": {"type": "string", "format": "date-time"},
+    "status": {"type": "string", "enum": ["filed", "accepted-for-review", "under-review", "upheld", "modified", "remanded", "withdrawn", "closed"]},
+    "grounds": {"type": "string", "minLength": 1},
+    "evidenceIds": {"type": "array", "uniqueItems": true, "items": {"type": "string", "pattern": "^tl:evidence:"}},
+    "disposition": {"type": "string"},
+    "decidedAt": {"type": "string", "format": "date-time"},
+    "supersedingAssessmentId": {"type": "string", "pattern": "^tl:assessment:"}
+  }
+}
