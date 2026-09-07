@@ -1,10 +1,10 @@
 openapi: 3.1.0
 info:
   title: Trust & Life Read-only Registry API
-  version: 0.2.0
+  version: 0.3.0
   description: >-
-    Minimal public lookup API for the Trust & Life reference implementation.
-    A registry response describes evidence and verification status; it is not a safety guarantee.
+    Public lookup, signing-key, credential-status, and federation discovery API.
+    Responses expose evidence and trust metadata; they are not safety guarantees.
 servers:
   - url: http://127.0.0.1:8080
 paths:
@@ -12,29 +12,49 @@ paths:
     get:
       operationId: health
       responses:
-        '200':
-          description: Service status
-          content:
-            application/json:
-              schema:
-                type: object
-                required: [ok]
-                properties:
-                  ok: {type: boolean}
+        '200': {description: Service status}
+  /.well-known/trust-life-registry:
+    get:
+      operationId: getRegistryDescriptor
+      responses:
+        '200': {description: Signed registry descriptor}
+  /v1/federation:
+    get:
+      operationId: getFederation
+      responses:
+        '200': {description: Local registry and source-preserving peer descriptors}
+  /v1/keys:
+    get:
+      operationId: listPublicKeys
+      responses:
+        '200': {description: Public signing keys}
+  /v1/keys/{keyId}:
+    get:
+      operationId: getPublicKey
+      parameters:
+        - in: path
+          name: keyId
+          required: true
+          schema: {type: string}
+      responses:
+        '200': {description: Public key descriptor}
+        '404': {description: Key not found}
+  /v1/credentials/{credentialId}/status:
+    get:
+      operationId: getCredentialStatus
+      parameters:
+        - in: path
+          name: credentialId
+          required: true
+          schema: {type: string}
+      responses:
+        '200': {description: Signed demonstration credential status}
+        '404': {description: Credential status not found}
   /v1/subjects:
     get:
       operationId: listSubjects
       responses:
-        '200':
-          description: Public subjects
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  items:
-                    type: array
-                    items: {type: object}
+        '200': {description: Public subjects}
   /v1/subjects/{subjectId}:
     get:
       operationId: getSubjectVerification
@@ -44,10 +64,5 @@ paths:
           required: true
           schema: {type: string}
       responses:
-        '200':
-          description: Consumer-oriented verification view
-          content:
-            application/json:
-              schema: {type: object}
-        '404':
-          description: Subject not found
+        '200': {description: Consumer verification view including cryptographic checks}
+        '404': {description: Subject not found}

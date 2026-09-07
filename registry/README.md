@@ -1,41 +1,27 @@
-# Registry
+# Registry and Federation
 
-The Trust & Life protocol does not require one central registry. A registry is a discoverability and presentation layer over portable evidence and attestations, not the ultimate source of truth.
+Trust & Life does not require one central registry.
 
-## v0.2 reference API
+v0.3 adds a signed registry descriptor, public key discovery, signed credential status, and a two-registry synthetic federation fixture.
 
-The dependency-free reference server implements a minimal read-only API documented in [`openapi.yaml`](openapi.yaml):
+## Discovery
 
-- `GET /health`
-- `GET /v1/subjects`
-- `GET /v1/subjects/{subjectId}`
-- `GET /verify?subject=...` for the consumer-facing verification view
+A registry SHOULD expose:
 
-Run it with:
+`/.well-known/trust-life-registry`
 
-```bash
-cd reference-implementation
-npm run serve
-```
+The descriptor identifies the registry operator, supported bundle/profile versions, public signing keys, peer discovery URLs, update time, and a JWS signature.
 
-The example registry index is [`demo-registry.json`](demo-registry.json).
+## Federation
 
-## Registry principles
+Peers are independent sources. A registry MUST NOT silently relabel a peer record as local data. When peers disagree, implementations should expose the source, signatures, validity/status information, and the conflict itself.
 
-A conforming registry SHOULD:
+The reference API exposes `/v1/federation` to demonstrate this source-preserving model.
 
-- expose the exact specification/profile version used for each conformance result;
-- use stable identifiers for subjects and records;
-- show whether information is self-declared, evidence-backed, continuously observable, or independently verified;
-- expose material evidence gaps, validity periods, suspension, revocation, and expiration states;
-- retain visible correction or supersession history for trust-sensitive records;
-- distinguish allegations from verified incidents;
-- publish an appeal/correction mechanism;
-- avoid presenting participation as permanent endorsement by Trust & Life;
-- provide machine-readable access to non-sensitive public records where practical.
+## Credential status
 
-## Decentralization
+The v0.3 demo uses a small signed status record so revocation behavior can be tested without additional dependencies. This custom fixture is not presented as W3C Bitstring Status List conformance. Production interoperability should prefer the W3C Bitstring Status List 1.0 model where appropriate.
 
-Registries SHOULD support exportable evidence metadata, standardized identifiers, portable credentials, and independently mirrored public records so verification does not depend exclusively on one operator.
+## Commercial neutrality
 
-A marketplace MAY operate a registry, but commercial ranking, advertising, commission arrangements, or partnership MUST NOT silently change the meaning of protocol conformance.
+Marketplace ranking, advertising, commissions, or partnerships MUST NOT alter the meaning of protocol conformance.

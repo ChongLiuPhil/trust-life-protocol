@@ -1,4 +1,4 @@
-name: Verify v0.2 reference implementation
+name: Verify v0.3 cryptographic federation
 
 on:
   push:
@@ -18,10 +18,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Verify evidence integrity and trust semantics
+      - name: Verify integrity, signatures, status and trust semantics
         working-directory: reference-implementation
         run: npm run verify
-      - name: Smoke-test read-only registry API
+      - name: Smoke-test registry and federation API
         working-directory: reference-implementation
         run: |
           node server.js >/tmp/trust-life-server.log 2>&1 &
@@ -30,3 +30,7 @@ jobs:
           sleep 1
           curl --fail --silent http://127.0.0.1:8080/health
           curl --fail --silent 'http://127.0.0.1:8080/v1/subjects/tl%3Asubject%3Aapple-2026-0001'
+          curl --fail --silent http://127.0.0.1:8080/.well-known/trust-life-registry
+          curl --fail --silent http://127.0.0.1:8080/v1/federation
+          curl --fail --silent http://127.0.0.1:8080/v1/keys
+          curl --fail --silent 'http://127.0.0.1:8080/v1/credentials/urn%3Auuid%3A9bca26a6-d31c-45e0-91fd-c2bf7f0b8a01/status'

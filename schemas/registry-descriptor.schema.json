@@ -4,7 +4,7 @@
   "title": "Trust & Life Registry Descriptor",
   "type": "object",
   "additionalProperties": false,
-  "required": ["id", "operatorOrganizationId", "baseUrl", "bundleVersions", "profileVersions", "updatedAt"],
+  "required": ["id", "operatorOrganizationId", "baseUrl", "bundleVersions", "profileVersions", "updatedAt", "jws"],
   "properties": {
     "id": {"type": "string", "pattern": "^tl:registry:"},
     "operatorOrganizationId": {"type": "string", "pattern": "^tl:org:"},
@@ -13,6 +13,7 @@
     "profileVersions": {"type": "object", "additionalProperties": {"type": "string"}},
     "keyIds": {"type": "array", "items": {"type": "string", "pattern": "^tl:key:"}},
     "peers": {"type": "array", "items": {"type": "string", "format": "uri"}},
-    "updatedAt": {"type": "string", "format": "date-time"}
+    "updatedAt": {"type": "string", "format": "date-time"},
+    "jws": {"type": "string", "pattern": "^[A-Za-z0-9_-]+\\.[A-Za-z0-9_-]+\\.[A-Za-z0-9_-]+$"}
   }
 }

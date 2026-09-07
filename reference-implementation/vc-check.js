@@ -18,18 +18,15 @@ if (contexts[0] !== 'https://www.w3.org/ns/credentials/v2') errors.push('first @
 if (!types.includes('VerifiableCredential')) errors.push('type must include VerifiableCredential');
 if (!vc.issuer) errors.push('issuer is required');
 if (!vc.credentialSubject) errors.push('credentialSubject is required');
-for (const key of ['validFrom', 'validUntil']) {
-  if (vc[key] && Number.isNaN(Date.parse(vc[key]))) errors.push(`${key} is not a parseable date-time`);
-}
-if (!vc.proof) warnings.push('credential has no cryptographic proof; this fixture demonstrates the VC 2.0 data model only');
+for (const key of ['validFrom', 'validUntil']) if (vc[key] && Number.isNaN(Date.parse(vc[key]))) errors.push(`${key} is not a parseable date-time`);
+if (!vc.credentialStatus) warnings.push('credential has no status reference');
 if (vc.validUntil && Date.now() > Date.parse(vc.validUntil)) warnings.push('credential validity period has ended');
 
 const report = {
   ok: errors.length === 0,
-  secured: Boolean(vc.proof),
   errors,
   warnings,
-  notice: 'A structurally valid VC payload is not cryptographically verifiable until an approved securing mechanism is applied and checked.'
+  notice: 'This command validates the VC 2.0 data-model fixture. The separate v0.3 crypto checker verifies its detached Ed25519 JWS and signed status record.'
 };
 console.log(JSON.stringify(report, null, 2));
 process.exit(report.ok ? 0 : 1);

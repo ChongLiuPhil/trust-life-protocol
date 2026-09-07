@@ -6,68 +6,57 @@
 > **See reality. Verify trust.**  
 > **看见真实，验证信任。**
 
-Trust & Life Protocol is an open-source framework for building **verifiable trust** between producers, processors, logistics providers, retailers, inspectors, consumers, and other participants in everyday supply chains.
+Trust & Life is an open protocol for making commercial and supply-chain claims more inspectable, portable, and independently verifiable.
 
-信·生开放互信协议是一套面向民生产业链的开源互信框架。目标不是要求公众“相信某个平台”，而是让重要商业声明尽可能具有可检查、可追溯、可验证的证据基础。
+信·生不是要求公众“相信平台”，而是尝试减少必须无条件信任任何单一机构的地方。
 
-## Core idea / 核心思想
+## Core model / 核心模型
 
-**Claim → Evidence → Verification → Trust**  
-**声明 → 证据 → 验证 → 信任**
+**Claim → Evidence → Integrity → Signature → Status → Verification → Trust**
 
-Trust & Life is not primarily a marketplace, certification company, or blockchain project. It asks a more fundamental question:
+A protocol implementation MUST keep the following concepts separate:
 
-> When an organization makes a claim about how a product was produced, stored, transported, inspected, or sold, how can another person independently examine the evidence behind that claim?
+- **Integrity** — retrieved bytes match a recorded digest.
+- **Authenticity** — a holder of a declared signing key signed a defined payload.
+- **Authority** — the signer is recognized as appropriate for the role or claim.
+- **Truth / compliance** — the underlying statement is factually correct and satisfies applicable rules.
 
-## Four layers
-
-1. **Standards** — open, versioned requirements.
-2. **Evidence** — structured records, media references, sensor data, reports, and attestations.
-3. **Verification** — source attribution, integrity checking, review status, validity, and visible limitations.
-4. **Commerce** — an optional transaction layer that does not define the meaning of trust.
-
-## Design principles
-
-- **Verifiable transparency, not blind trust.**
-- **Process transparency, not human surveillance.**
-- **Open protocol, plural implementations.**
-- **Interoperability first.**
-- **Blockchain optional.**
-- **No absolute-safety claims.**
-- **Due process for public reports and disputes.**
-- **Responsible economics rather than destructive price competition.**
+A valid hash or signature is not a food-safety guarantee.
 
 ## Evidence-strength levels
 
-| Level | Name | Meaning |
-| --- | --- | --- |
-| **T0** | Declared | Information is self-declared. |
-| **T1** | Evidence-backed | Required evidence is linked to the claim. |
-| **T2** | Continuously Observable | Defined processes have recurring/continuous observational evidence with documented scope and gaps. |
-| **T3** | Independently Verified | A defined claim has been reviewed or attested by an independent qualified party. |
+| Level | Meaning |
+| --- | --- |
+| **T0 — Declared** | Self-declared information. |
+| **T1 — Evidence-backed** | Required evidence is linked to the claim. |
+| **T2 — Continuously Observable** | Defined processes have recurring/continuous observational evidence with visible scope and gaps. |
+| **T3 — Independently Verified** | A defined claim has an independent qualified verification or attestation. |
 
-Overall conformance MUST NOT be displayed at a level higher than the weakest included claim unless a domain profile defines and justifies another aggregation rule.
+Overall conformance is not allowed to silently exceed the weakest included claim unless a domain profile explicitly defines another aggregation rule.
 
-## v0.2 runnable prototype / 可运行原型
+## v0.3 — Cryptographic Trust & Federation
 
-v0.2 completes the first machine-verifiable loop:
+v0.3 adds the first portable cryptographic/federation loop:
 
-**Organization → Subject → Claim → Evidence bytes → Verification → Conformance → Public Registry View**
+**Organization → Subject → Evidence bytes → Signed manifest → Signed credential → Signed status → Registry → Peer Registry**
 
-It includes:
+Included:
 
-- eight JSON Schemas and a portable v0.2 trust bundle;
-- a synthetic apple supply-chain example;
-- real SHA-256 digests for all local demonstration evidence;
-- a dependency-free Node.js verifier that recomputes evidence hashes;
-- a read-only Registry API and consumer verification page;
-- browser-side SHA-256 rechecking with Web Crypto;
-- a QR-target verification URL based on the stable subject ID;
-- an illustrative GS1 EPCIS mapping and JSON-LD event export;
-- a W3C Verifiable Credentials Data Model 2.0 laboratory-attestation fixture;
-- CI that verifies the bundle, checks the VC structure, and smoke-tests the Registry API.
+- real SHA-256 evidence verification;
+- Ed25519 public keys represented as JWK;
+- compact JWS signatures using `EdDSA`;
+- a producer-signed evidence manifest;
+- a W3C VC Data Model 2.0 laboratory-attestation payload secured by a detached JWS fixture;
+- a signed credential-status record;
+- signed primary and secondary Registry descriptors using distinct keys;
+- source-preserving federation discovery;
+- key lifecycle fields for active, retired, and revoked keys;
+- CI that verifies hashes, signatures, status, and Registry API endpoints;
+- a consumer QR-target page that displays integrity and signature states separately.
 
-### Run
+No private signing keys are stored in this repository.
+
+## Run
 
 ```bash
 cd reference-implementation
@@ -81,58 +70,43 @@ Then open:
 http://127.0.0.1:8080/verify?subject=tl%3Asubject%3Aapple-2026-0001
 ```
 
-## What integrity does — and does not — prove
+## Federation principle
 
-A matching SHA-256 digest demonstrates that the bytes retrieved by the verifier match the bytes whose digest was recorded.
+Trust & Life does not define a single root Registry. Independent registries may publish signed descriptors and discover peers. Peer records retain their source identity. If registries disagree, an implementation should expose the disagreement rather than silently choosing a winner.
 
-It does **not** prove that:
+See [`interoperability/crypto-federation.md`](interoperability/crypto-federation.md) and [`registry/README.md`](registry/README.md).
 
-- the underlying event actually happened as described;
-- no relevant event was omitted;
-- the evidence source was competent or honest;
-- a product is legally compliant or absolutely safe.
+## Standards direction
 
-Trust & Life therefore keeps integrity, provenance, independent verification, incidents, and domain requirements as separate layers.
+The project currently targets stable standards where practical:
 
-## Interoperability
+- GS1 EPCIS 2.0.1 / CBV 2.0.0 for supply-chain visibility events;
+- W3C Verifiable Credentials Data Model 2.0 for portable credentials;
+- JOSE/JWS with Ed25519/EdDSA for the v0.3 dependency-free signature fixture;
+- W3C Verifiable Credential Data Integrity 1.0 and EdDSA Cryptosuites 1.0 as compatible future securing profiles;
+- W3C Controlled Identifiers 1.0 for richer controller/key publication;
+- W3C Bitstring Status List 1.0 as the preferred interoperable credential-status direction.
 
-See [`interoperability/`](interoperability/).
-
-- **GS1 EPCIS 2.0.1 / CBV 2.0.0** are the preferred direction for interoperable supply-chain visibility events and sensor information.
-- **W3C Verifiable Credentials Data Model 2.0** is the stable target for portable issuer attestations.
-
-The repository references external standards but does not claim endorsement by GS1, W3C, ISO, regulators, laboratories, or certification bodies.
+References do not imply endorsement or certification by GS1, W3C, ISO, regulators, laboratories, or other standards bodies.
 
 ## Repository map
 
 ```text
-trust-life-protocol/
-├── standards/
-├── schemas/
-├── interoperability/
-├── examples/apple-supply-chain/
-│   ├── evidence/
-│   ├── credentials/
-│   └── epcis/
-├── registry/
-├── reference-implementation/
-│   ├── verifier.js
-│   ├── vc-check.js
-│   ├── server.js
-│   └── web/
-└── marketplace/
+standards/                  normative Trust & Life requirements
+schemas/                    machine-readable data models
+interoperability/           EPCIS, VC, crypto and federation mappings
+examples/apple-supply-chain synthetic v0.3 evidence and signatures
+registry/                   discovery, status and federation fixtures
+reference-implementation/   verifier, crypto checker, Registry API and web UI
+marketplace/                optional commerce-layer boundary
 ```
 
-## Project boundary
+## Non-goals
 
-Not part of v0.2: payment processing, a full e-commerce marketplace, proprietary hardware, mandatory blockchain infrastructure, real-world credential signing/key management, private-evidence authorization, or formal regulatory certification.
+Trust & Life is not a legal certification authority, a universal trust score, a mandatory blockchain, a surveillance system, or a guarantee that a product is absolutely safe.
 
-Normative requirements live under [`standards/`](standards/). See [`GOVERNANCE.md`](GOVERNANCE.md) and [`CONTRIBUTING.md`](CONTRIBUTING.md) for project governance.
-
-## Status
-
-**v0.2 draft reference implementation.** Suitable for protocol discussion, prototyping, interoperability work, and test integrations. Nothing in this repository constitutes legal certification, regulatory approval, a food-safety guarantee, professional audit opinion, or endorsement of a real product.
+**Status: v0.3 draft reference implementation.** All example organizations, products, credentials and Registry endpoints are synthetic.
 
 ## License
 
-Original project code and documentation are openly reusable under the repository license. Third-party standards, trademarks, reports, identifiers, and evidence remain subject to their own rights and terms.
+Original code and project documentation are released under the repository license. Third-party standards and trademarks remain subject to their own terms.

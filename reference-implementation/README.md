@@ -1,46 +1,37 @@
-# Reference Implementation v0.2
+# Reference Implementation v0.3
 
-The reference implementation remains dependency-free and intentionally small.
+The reference implementation remains dependency-free and uses Node.js built-in cryptography.
 
-## 1. Evidence and semantic verifier
+## Verify everything
 
 ```bash
 cd reference-implementation
-npm run verify:demo
-```
-
-The verifier checks cross-object references, T0–T3 relationships, independent verification for T3, conformance-level aggregation, evidence-path containment, and the **actual SHA-256 bytes** of local evidence files.
-
-A matching digest establishes byte-level integrity relative to the recorded digest; it does not establish factual truth or food safety.
-
-## 2. VC structure check
-
-```bash
-npm run verify:vc
-```
-
-The demo credential is deliberately unsecured. The checker validates basic VC 2.0 structure and warns that no cryptographic proof is present.
-
-Run both checks with:
-
-```bash
 npm run verify
 ```
 
-## 3. Read-only registry and verification page
+This checks:
+
+1. cross-object trust semantics;
+2. actual SHA-256 evidence bytes;
+3. Ed25519 JWS signatures on evidence manifests;
+4. the detached JWS securing the VC 2.0 demonstration payload;
+5. signed credential status;
+6. signed primary and peer registry descriptors.
+
+No private signing keys are committed to the repository.
+
+## Run the Registry
 
 ```bash
 npm run serve
 ```
 
-Then open:
+Open:
 
 `http://127.0.0.1:8080/verify?subject=tl%3Asubject%3Aapple-2026-0001`
 
-The browser retrieves public evidence files and independently recomputes their SHA-256 digests using the Web Crypto API. The same page can also operate as a static site using its bundled-data fallback.
+Useful endpoints include `/.well-known/trust-life-registry`, `/v1/federation`, `/v1/keys`, and `/v1/credentials/{credentialId}/status`.
 
-The displayed verification URL is the intended QR-code target. The protocol does not require a particular QR rendering library or central domain.
+## Interpretation
 
-## Boundaries
-
-This reference implementation does not provide payments, seller onboarding, identity proofing, real laboratory integrations, real credential signatures, authorization for private evidence, or formal certification services.
+A valid signature means the signed bytes were produced by a holder of the corresponding private key. It does not prove that the signer was competent, legally authorized, honest, or factually correct. Authority and truth remain separate verification layers.

@@ -1,0 +1,12 @@
+{
+  "id": "tl:manifest:apple-2026-0001",
+  "subjectId": "tl:subject:apple-2026-0001",
+  "issuer": "tl:org:green-orchard",
+  "keyId": "tl:key:green-orchard-2026-01",
+  "createdAt": "2026-09-03T09:30:00+08:00",
+  "entries": [
+    {"evidenceId":"tl:evidence:harvest-record","uri":"evidence/harvest-record.json","mediaType":"application/json","sha256":"29fff0fdba33bc4d5b7d817c31c724d01bdca7dc68c655d0f668483404df1e07"},
+    {"evidenceId":"tl:evidence:orchard-observation","uri":"evidence/observation-manifest.json","mediaType":"application/json","sha256":"13d6c1638b08026d6c8625722044c95f7216616bde3fe7c48dd921ab37c69448"}
+  ],
+  "jws": "eyJhbGciOiJFZERTQSIsImtpZCI6InRsOmtleTpncmVlbi1vcmNoYXJkLTIwMjYtMDEiLCJ0eXAiOiJKT1NFIn0.eyJjcmVhdGVkQXQiOiIyMDI2LTA5LTAzVDA5OjMwOjAwKzA4OjAwIiwiZW50cmllcyI6W3siZXZpZGVuY2VJZCI6InRsOmV2aWRlbmNlOmhhcnZlc3QtcmVjb3JkIiwibWVkaWFUeXBlIjoiYXBwbGljYXRpb24vanNvbiIsInNoYTI1NiI6IjI5ZmZmMGZkYmEzM2JjNGQ1YjdkODE3YzMxYzcyNGQwMWJkY2E3ZGM2OGM2NTVkMGY2Njg0ODM0MDRkZjFlMDciLCJ1cmkiOiJldmlkZW5jZS9oYXJ2ZXN0LXJlY29yZC5qc29uIn0seyJldmlkZW5jZUlkIjoidGw6ZXZpZGVuY2U6b3JjaGFyZC1vYnNlcnZhdGlvbiIsIm1lZGlhVHlwZSI6ImFwcGxpY2F0aW9uL2pzb24iLCJzaGEyNTYiOiIxM2Q2YzE2MzhiMDgwMjZkNmM4NjI1NzIyMDQ0Yzk1ZjcyMTY2MTZiZGUzZmU3YzQ4ZGQ5MjFhYjM3YzY5NDQ4IiwidXJpIjoiZXZpZGVuY2Uvb2JzZXJ2YXRpb24tbWFuaWZlc3QuanNvbiJ9XSwiaWQiOiJ0bDptYW5pZmVzdDphcHBsZS0yMDI2LTAwMDEiLCJpc3N1ZXIiOiJ0bDpvcmc6Z3JlZW4tb3JjaGFyZCIsImtleUlkIjoidGw6a2V5OmdyZWVuLW9yY2hhcmQtMjAyNi0wMSIsInN1YmplY3RJZCI6InRsOnN1YmplY3Q6YXBwbGUtMjAyNi0wMDAxIn0.adgV5N6BtRAWi7sJSIGeasiWwW2mNe0ws9o32kiDsWdL9RbA4kh543chRDB9p9x2mcI5yn5bNpm62vv7GN11CA"
+}

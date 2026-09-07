@@ -1,10 +1,11 @@
 {
-  "bundleVersion": "0.2",
+  "bundleVersion": "0.3",
   "organizations": [
     {"id":"tl:org:green-orchard","name":"Green Orchard Cooperative (Demo)","type":"producer","jurisdiction":"CN-SD"},
     {"id":"tl:org:coldway","name":"ColdWay Logistics (Demo)","type":"logistics","jurisdiction":"CN-SD"},
     {"id":"tl:org:clearcheck-lab","name":"ClearCheck Laboratory (Demo)","type":"laboratory","jurisdiction":"CN-SD"},
-    {"id":"tl:org:trustlife-demo","name":"Trust & Life Demo Verifier","type":"platform","jurisdiction":"GLOBAL"}
+    {"id":"tl:org:trustlife-demo","name":"Trust & Life Demo Verifier","type":"platform","jurisdiction":"GLOBAL"},
+    {"id":"tl:org:trustlife-peer-demo","name":"Trust & Life Peer Registry Demo","type":"platform","jurisdiction":"GLOBAL"}
   ],
   "subjects": [
     {"id":"tl:subject:apple-2026-0001","kind":"batch","name":"Demo Apple Batch A20260901","organizationId":"tl:org:green-orchard","lotCode":"A20260901","productionDate":"2026-09-01"},
@@ -25,11 +26,20 @@
   "verifications": [
     {"id":"tl:verification:record-integrity","claimId":"tl:claim:production-records","verifierOrganizationId":"tl:org:trustlife-demo","method":"automated-integrity-check","status":"verified","verifiedAt":"2026-09-03T10:00:00+08:00"},
     {"id":"tl:verification:observation-integrity","claimId":"tl:claim:continuous-observation","verifierOrganizationId":"tl:org:trustlife-demo","method":"automated-integrity-check","status":"verified","verifiedAt":"2026-09-03T10:01:00+08:00"},
-    {"id":"tl:verification:lab-report-review","claimId":"tl:claim:lab-screening","verifierOrganizationId":"tl:org:clearcheck-lab","method":"laboratory-test","status":"verified","verifiedAt":"2026-09-01T16:40:00+08:00","validUntil":"2026-10-01T16:40:00+08:00","credentialUri":"credentials/lab-attestation.vc.json","credentialMediaType":"application/vc"},
+    {"id":"tl:verification:lab-report-review","claimId":"tl:claim:lab-screening","verifierOrganizationId":"tl:org:clearcheck-lab","method":"laboratory-test","status":"verified","verifiedAt":"2026-09-01T16:40:00+08:00","validUntil":"2026-10-01T16:40:00+08:00","keyId":"tl:key:clearcheck-2026-01","credentialUri":"credentials/lab-attestation.vc.json","credentialMediaType":"application/vc","credentialJwsUri":"credentials/lab-attestation.vc.jws","credentialStatusUri":"../../registry/demo/credential-status.json"},
     {"id":"tl:verification:temperature-integrity","claimId":"tl:claim:cold-chain","verifierOrganizationId":"tl:org:trustlife-demo","method":"automated-integrity-check","status":"verified","verifiedAt":"2026-09-03T10:02:00+08:00"}
   ],
   "incidents": [],
   "conformance": [
     {"id":"tl:conformance:apple-2026-0001","subjectId":"tl:subject:apple-2026-0001","profile":"TL-FOOD-001","profileVersion":"0.1","level":"T1","status":"conformant","evaluatedAt":"2026-09-03T10:10:00+08:00","validUntil":"2026-10-01T16:40:00+08:00","claimIds":["tl:claim:production-records","tl:claim:continuous-observation","tl:claim:lab-screening"],"limitations":["Overall level follows the lowest included claim level; the laboratory claim is independently verified at T3.","This repository example contains synthetic data and MUST NOT be represented as a real food-safety certification."]}
+  ],
+  "keys": [
+    {"id":"tl:key:green-orchard-2026-01","controller":"tl:org:green-orchard","type":"Ed25519","publicKeyJwk":{"kty":"OKP","crv":"Ed25519","x":"6-4ote1OvNDfUZ0ShQdOiuDFz5kcdXVLevjHunYwRV0"},"purposes":["manifest-signing"],"validFrom":"2026-09-01T00:00:00Z","status":"active","notes":"Synthetic demo public key; private key is not published."},
+    {"id":"tl:key:clearcheck-2026-01","controller":"tl:org:clearcheck-lab","type":"Ed25519","publicKeyJwk":{"kty":"OKP","crv":"Ed25519","x":"zilth1nBUoKTH53Zl2tD-FJ0sg9kAoL9_Nytk3ktT3g"},"purposes":["assertion"],"validFrom":"2026-09-01T00:00:00Z","status":"active","notes":"Synthetic demo public key; private key is not published."},
+    {"id":"tl:key:registry-demo-2026-01","controller":"tl:org:trustlife-demo","type":"Ed25519","publicKeyJwk":{"kty":"OKP","crv":"Ed25519","x":"WElX7W0Qjl7O2JJVJ67DW88qu4i3TscU-sejzL4tF5A"},"purposes":["registry-signing"],"validFrom":"2026-09-01T00:00:00Z","status":"active","notes":"Synthetic primary registry public key."},
+    {"id":"tl:key:registry-peer-2026-01","controller":"tl:org:trustlife-peer-demo","type":"Ed25519","publicKeyJwk":{"kty":"OKP","crv":"Ed25519","x":"TwzO1vzYOcs8rfaViIBsSpsolYNEjKuKyQmfq_Avfzs"},"purposes":["registry-signing"],"validFrom":"2026-09-01T00:00:00Z","status":"active","notes":"Synthetic secondary registry public key."}
+  ],
+  "manifests": [
+    {"id":"tl:manifest:apple-2026-0001","subjectId":"tl:subject:apple-2026-0001","issuer":"tl:org:green-orchard","keyId":"tl:key:green-orchard-2026-01","createdAt":"2026-09-03T09:30:00+08:00","entries":[{"evidenceId":"tl:evidence:harvest-record","uri":"evidence/harvest-record.json","mediaType":"application/json","sha256":"29fff0fdba33bc4d5b7d817c31c724d01bdca7dc68c655d0f668483404df1e07"},{"evidenceId":"tl:evidence:orchard-observation","uri":"evidence/observation-manifest.json","mediaType":"application/json","sha256":"13d6c1638b08026d6c8625722044c95f7216616bde3fe7c48dd921ab37c69448"}],"jws":"eyJhbGciOiJFZERTQSIsImtpZCI6InRsOmtleTpncmVlbi1vcmNoYXJkLTIwMjYtMDEiLCJ0eXAiOiJKT1NFIn0.eyJjcmVhdGVkQXQiOiIyMDI2LTA5LTAzVDA5OjMwOjAwKzA4OjAwIiwiZW50cmllcyI6W3siZXZpZGVuY2VJZCI6InRsOmV2aWRlbmNlOmhhcnZlc3QtcmVjb3JkIiwibWVkaWFUeXBlIjoiYXBwbGljYXRpb24vanNvbiIsInNoYTI1NiI6IjI5ZmZmMGZkYmEzM2JjNGQ1YjdkODE3YzMxYzcyNGQwMWJkY2E3ZGM2OGM2NTVkMGY2Njg0ODM0MDRkZjFlMDciLCJ1cmkiOiJldmlkZW5jZS9oYXJ2ZXN0LXJlY29yZC5qc29uIn0seyJldmlkZW5jZUlkIjoidGw6ZXZpZGVuY2U6b3JjaGFyZC1vYnNlcnZhdGlvbiIsIm1lZGlhVHlwZSI6ImFwcGxpY2F0aW9uL2pzb24iLCJzaGEyNTYiOiIxM2Q2YzE2MzhiMDgwMjZkNmM4NjI1NzIyMDQ0Yzk1ZjcyMTY2MTZiZGUzZmU3YzQ4ZGQ5MjFhYjM3YzY5NDQ4IiwidXJpIjoiZXZpZGVuY2Uvb2JzZXJ2YXRpb24tbWFuaWZlc3QuanNvbiJ9XSwiaWQiOiJ0bDptYW5pZmVzdDphcHBsZS0yMDI2LTAwMDEiLCJpc3N1ZXIiOiJ0bDpvcmc6Z3JlZW4tb3JjaGFyZCIsImtleUlkIjoidGw6a2V5OmdyZWVuLW9yY2hhcmQtMjAyNi0wMSIsInN1YmplY3RJZCI6InRsOnN1YmplY3Q6YXBwbGUtMjAyNi0wMDAxIn0.adgV5N6BtRAWi7sJSIGeasiWwW2mNe0ws9o32kiDsWdL9RbA4kh543chRDB9p9x2mcI5yn5bNpm62vv7GN11CA"}
   ]
 }

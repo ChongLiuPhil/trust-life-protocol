@@ -1,13 +1,14 @@
 {
   "name": "trust-life-reference-implementation",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
-  "description": "Dependency-free Trust & Life integrity verifier and read-only registry demo",
+  "description": "Dependency-free Trust & Life integrity, signature, status, and federation verifier",
   "type": "module",
   "scripts": {
     "verify:demo": "node verifier.js ../examples/apple-supply-chain/trust-bundle.json",
     "verify:vc": "node vc-check.js ../examples/apple-supply-chain/credentials/lab-attestation.vc.json",
-    "verify": "npm run verify:demo && npm run verify:vc",
+    "verify:crypto": "node crypto-check.js ../examples/apple-supply-chain/trust-bundle.json",
+    "verify": "npm run verify:demo && npm run verify:vc && npm run verify:crypto",
     "serve": "node server.js"
   }
 }

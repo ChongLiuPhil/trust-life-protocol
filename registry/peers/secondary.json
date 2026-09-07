@@ -1,0 +1,11 @@
+{
+  "id": "tl:registry:demo-secondary",
+  "operatorOrganizationId": "tl:org:trustlife-peer-demo",
+  "baseUrl": "https://peer.trust-life.invalid",
+  "bundleVersions": ["0.3"],
+  "profileVersions": {"TL-CORE-001":"0.1","TL-FOOD-001":"0.1"},
+  "keyIds": ["tl:key:registry-peer-2026-01"],
+  "peers": ["https://demo.trust-life.invalid/.well-known/trust-life-registry"],
+  "updatedAt": "2026-09-07T11:45:00Z",
+  "jws": "eyJhbGciOiJFZERTQSIsImtpZCI6InRsOmtleTpyZWdpc3RyeS1wZWVyLTIwMjYtMDEiLCJ0eXAiOiJKT1NFIn0.eyJiYXNlVXJsIjoiaHR0cHM6Ly9wZWVyLnRydXN0LWxpZmUuaW52YWxpZCIsImJ1bmRsZVZlcnNpb25zIjpbIjAuMyJdLCJpZCI6InRsOnJlZ2lzdHJ5OmRlbW8tc2Vjb25kYXJ5Iiwia2V5SWRzIjpbInRsOmtleTpyZWdpc3RyeS1wZWVyLTIwMjYtMDEiXSwib3BlcmF0b3JPcmdhbml6YXRpb25JZCI6InRsOm9yZzp0cnVzdGxpZmUtcGVlci1kZW1vIiwicGVlcnMiOlsiaHR0cHM6Ly9kZW1vLnRydXN0LWxpZmUuaW52YWxpZC8ud2VsbC1rbm93bi90cnVzdC1saWZlLXJlZ2lzdHJ5Il0sInByb2ZpbGVWZXJzaW9ucyI6eyJUTC1DT1JFLTAwMSI6IjAuMSIsIlRMLUZPT0QtMDAxIjoiMC4xIn0sInVwZGF0ZWRBdCI6IjIwMjYtMDktMDdUMTE6NDU6MDBaIn0.imREogOx7NN8fLu4IKlLhhq6tphFurbmeUyzNkaDnuK38zpjeUzJ6p999gNAxItTE9V6YGmlBah07dIa2O46DQ"
+}
