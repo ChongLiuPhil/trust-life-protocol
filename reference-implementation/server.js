@@ -5,6 +5,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { unsignedObject, verifyCompactJws } from './crypto.js';
 import { evaluateConformance } from './conformance.js';
+import { buildPublicProjection } from './publication.js';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(here, '..');
@@ -14,6 +15,7 @@ const bundlePath = path.join(demoRoot, 'trust-bundle.json');
 const applicationPath = path.join(demoRoot, 'onboarding', 'application.json');
 const gapApplicationPath = path.join(demoRoot, 'onboarding', 'application-gap.json');
 const profilePath = path.join(repoRoot, 'profiles', 'food-produce', 'TL-FRESH-PRODUCE-001.profile.json');
+const pilotStatePath = path.join(repoRoot, 'field-pilot', 'demo-state.json');
 const descriptorPath = path.join(repoRoot, 'registry', 'descriptor.json');
 const peerDescriptorPath = path.join(repoRoot, 'registry', 'peers', 'secondary.json');
 const statusPath = path.join(repoRoot, 'registry', 'demo', 'credential-status.json');
@@ -24,6 +26,7 @@ const readJson = file => JSON.parse(fs.readFileSync(file, 'utf8'));
 const readBundle = () => readJson(bundlePath);
 const readProfile = () => readJson(profilePath);
 const readApplication = () => readJson(applicationPath);
+const readPilotState = () => readJson(pilotStatePath);
 const byId = xs => new Map((xs || []).map(x => [x.id, x]));
 
 function json(res, status, value) {
@@ -117,19 +120,43 @@ function publicApplicationView(application) {
   };
 }
 
-function assessmentFor(application, bundle) {
+function publicPilotView(pilot) {
+  return {
+    pilotId: pilot.pilotId,
+    profileId: pilot.profileId,
+    applicationId: pilot.applicationId,
+    state: pilot.state,
+    updatedAt: pilot.updatedAt,
+    publicProjectionAllowed: pilot.publicProjectionAllowed,
+    currentAssessmentDecision: pilot.currentAssessmentDecision,
+    reason: pilot.reason,
+    notice: 'Lifecycle state controls whether a current public conformance projection may be published. Historical verification/resolver pages may remain available to explain suspension or withdrawal.'
+  };
+}
+
+function assessmentFor(application, bundle, evaluatedAt = application.submittedAt) {
   return evaluateConformance({
     application,
     profile: readProfile(),
     bundle,
-    evaluatedAt: application.submittedAt,
-    evaluatorVersion: '0.4.0'
+    evaluatedAt,
+    evaluatorVersion: '0.5.0'
   });
 }
 
 function pilotApplicationForSubject(subjectId) {
   const application = readApplication();
   return (application.scope?.coveredSubjectIds || []).includes(subjectId) ? application : null;
+}
+
+function currentPublication(bundle) {
+  return buildPublicProjection({
+    application: readApplication(),
+    profile: readProfile(),
+    bundle,
+    pilot: readPilotState(),
+    evaluatorVersion: '0.5.0'
+  });
 }
 
 function verificationView(bundle, subjectId) {
@@ -153,11 +180,12 @@ function verificationView(bundle, subjectId) {
   }));
   const incidents = (bundle.incidents || []).filter(i => i.subjectId === subjectId);
   const application = pilotApplicationForSubject(subjectId);
-  const pilotAssessment = application ? assessmentFor(application, bundle) : null;
+  const publication = application ? currentPublication(bundle) : null;
+  const pilot = application ? readPilotState() : null;
 
   return {
     protocol: 'Trust & Life Protocol',
-    referenceImplementation: '0.4.0',
+    referenceImplementation: '0.5.0',
     bundleVersion: bundle.bundleVersion,
     subject,
     owner: orgs.get(subject.organizationId) || null,
@@ -166,11 +194,15 @@ function verificationView(bundle, subjectId) {
     incidents,
     unresolvedIncidents: incidents.filter(i => !['resolved', 'not-substantiated'].includes(i.status)).length,
     cryptographic: cryptographicView(bundle, subjectId, claimIds),
-    pilotAssessment,
+    pilotAssessment: publication?.assessment || null,
+    pilotLifecycle: pilot ? publicPilotView(pilot) : null,
+    publicationAllowed: publication?.allowed ?? null,
+    publicationReasons: publication?.reasons || [],
     onboardingApplicationId: application?.id || null,
     verificationPath: `/verify?subject=${encodeURIComponent(subject.id)}`,
     qrResolverPath: `/r/${encodeURIComponent(subject.id)}`,
-    notice: 'This view reports evidence, cryptographic integrity, signatures, status, and pilot conformance findings. It is not a food-safety guarantee or purchasing recommendation.'
+    publicProjectionPath: application ? `/v1/public-projection/${encodeURIComponent(subject.id)}` : null,
+    notice: 'This view reports evidence, cryptographic integrity, signatures, status, lifecycle, and pilot conformance findings. It is not a food-safety guarantee or purchasing recommendation.'
   };
 }
 
@@ -178,12 +210,13 @@ const server = http.createServer((req, res) => {
   try {
     const url = new URL(req.url, `http://${req.headers.host || `${host}:${port}`}`);
     if (req.method !== 'GET') return json(res, 405, { error: 'method_not_allowed' });
-    if (url.pathname === '/health') return json(res, 200, { ok: true, protocol: 'trust-life', referenceImplementation: '0.4.0' });
+    if (url.pathname === '/health') return json(res, 200, { ok: true, protocol: 'trust-life', referenceImplementation: '0.5.0' });
 
     const bundle = readBundle();
     const keys = byId(bundle.keys);
     const profile = readProfile();
     const application = readApplication();
+    const pilot = readPilotState();
 
     if (url.pathname === '/.well-known/trust-life-registry') return json(res, 200, readJson(descriptorPath));
     if (url.pathname === '/v1/federation') {
@@ -201,7 +234,27 @@ const server = http.createServer((req, res) => {
 
     if (url.pathname === '/v1/onboarding') return json(res, 200, { items: [publicApplicationView(application)] });
     if (url.pathname === `/v1/onboarding/${encodeURIComponent(application.id)}` || url.pathname === `/v1/onboarding/${application.id}`) return json(res, 200, publicApplicationView(application));
-    if (url.pathname === `/v1/onboarding/${encodeURIComponent(application.id)}/assessment` || url.pathname === `/v1/onboarding/${application.id}/assessment`) return json(res, 200, assessmentFor(application, bundle));
+    if (url.pathname === `/v1/onboarding/${encodeURIComponent(application.id)}/assessment` || url.pathname === `/v1/onboarding/${application.id}/assessment`) return json(res, 200, assessmentFor(application, bundle, pilot.updatedAt));
+
+    if (url.pathname === '/v1/pilots') return json(res, 200, { items: [publicPilotView(pilot)] });
+    if (url.pathname === `/v1/pilots/${encodeURIComponent(pilot.pilotId)}` || url.pathname === `/v1/pilots/${pilot.pilotId}`) return json(res, 200, publicPilotView(pilot));
+
+    if (url.pathname.startsWith('/v1/public-projection/')) {
+      const id = decodeURIComponent(url.pathname.slice('/v1/public-projection/'.length));
+      const subject = (bundle.subjects || []).find(x => x.id === id);
+      const scoped = (application.scope?.coveredSubjectIds || []).includes(id);
+      if (!subject || !scoped) return json(res, 404, { error: 'public_projection_not_found' });
+      const result = currentPublication(bundle);
+      if (!result.allowed) return json(res, 409, {
+        error: 'public_projection_not_allowed',
+        subjectId: id,
+        pilotState: result.pilotState,
+        assessmentDecision: result.assessment.decision,
+        reasons: result.reasons,
+        notice: result.notice
+      });
+      return json(res, 200, { requestedSubjectId: id, ...result.projection });
+    }
 
     if (url.pathname === '/v1/keys') return json(res, 200, { items: bundle.keys });
     if (url.pathname.startsWith('/v1/keys/')) {
@@ -222,8 +275,8 @@ const server = http.createServer((req, res) => {
     if (url.pathname.startsWith('/v1/subjects/') && url.pathname.endsWith('/assessment')) {
       const encoded = url.pathname.slice('/v1/subjects/'.length, -'/assessment'.length);
       const id = decodeURIComponent(encoded);
-      const pilot = pilotApplicationForSubject(id);
-      return pilot ? json(res, 200, assessmentFor(pilot, bundle)) : json(res, 404, { error: 'assessment_not_found' });
+      const pilotApplication = pilotApplicationForSubject(id);
+      return pilotApplication ? json(res, 200, assessmentFor(pilotApplication, bundle, pilot.updatedAt)) : json(res, 404, { error: 'assessment_not_found' });
     }
 
     if (url.pathname.startsWith('/v1/subjects/')) {
@@ -239,6 +292,7 @@ const server = http.createServer((req, res) => {
         subjectId: id,
         resolverPath: `/r/${encodeURIComponent(id)}`,
         verificationPath: `/verify?subject=${encodeURIComponent(id)}`,
+        publicProjectionPath: `/v1/public-projection/${encodeURIComponent(id)}`,
         gs1DigitalLinkNote: 'If an operator has properly assigned GS1 identifiers, a GS1-conformant resolver can link those identifiers to this verification service. The synthetic Trust & Life subject ID is not itself a GS1 Digital Link identifier.'
       }) : json(res, 404, { error: 'subject_not_found' });
     }
@@ -268,4 +322,4 @@ const server = http.createServer((req, res) => {
   }
 });
 
-server.listen(port, host, () => console.log(`Trust & Life v0.4 registry: http://${host}:${port}/verify?subject=tl%3Asubject%3Aapple-2026-0001`));
+server.listen(port, host, () => console.log(`Trust & Life v0.5 registry: http://${host}:${port}/verify?subject=tl%3Asubject%3Aapple-2026-0001`));
