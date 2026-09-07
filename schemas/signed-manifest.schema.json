@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://trustlife.example/schemas/signed-manifest.schema.json",
+  "title": "Trust & Life Signed Evidence Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "subjectId", "issuer", "keyId", "createdAt", "entries", "jws"],
+  "properties": {
+    "id": {"type": "string", "pattern": "^tl:manifest:"},
+    "subjectId": {"type": "string", "pattern": "^tl:subject:"},
+    "issuer": {"type": "string", "pattern": "^tl:org:"},
+    "keyId": {"type": "string", "pattern": "^tl:key:"},
+    "createdAt": {"type": "string", "format": "date-time"},
+    "entries": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["evidenceId", "uri", "mediaType", "sha256"],
+        "properties": {
+          "evidenceId": {"type": "string", "pattern": "^tl:evidence:"},
+          "uri": {"type": "string", "format": "uri-reference"},
+          "mediaType": {"type": "string"},
+          "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+        }
+      }
+    },
+    "jws": {"type": "string", "pattern": "^[A-Za-z0-9_-]+\\.[A-Za-z0-9_-]+\\.[A-Za-z0-9_-]+$"}
+  }
+}

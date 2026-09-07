@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://trustlife.example/schemas/key.schema.json",
+  "title": "Trust & Life Public Signing Key",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "controller", "type", "publicKeyJwk", "purposes", "validFrom", "status"],
+  "properties": {
+    "id": {"type": "string", "pattern": "^tl:key:[A-Za-z0-9._:-]+$"},
+    "controller": {"type": "string", "pattern": "^tl:org:"},
+    "type": {"const": "Ed25519"},
+    "publicKeyJwk": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kty", "crv", "x"],
+      "properties": {
+        "kty": {"const": "OKP"},
+        "crv": {"const": "Ed25519"},
+        "x": {"type": "string", "minLength": 43, "maxLength": 43}
+      }
+    },
+    "purposes": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"enum": ["assertion", "manifest-signing", "registry-signing"]}},
+    "validFrom": {"type": "string", "format": "date-time"},
+    "validUntil": {"type": "string", "format": "date-time"},
+    "status": {"enum": ["active", "retired", "revoked"]},
+    "revokedAt": {"type": "string", "format": "date-time"},
+    "notes": {"type": "string"}
+  }
+}

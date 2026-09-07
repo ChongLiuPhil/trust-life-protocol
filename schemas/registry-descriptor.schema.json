@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://trustlife.example/schemas/registry-descriptor.schema.json",
+  "title": "Trust & Life Registry Descriptor",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "operatorOrganizationId", "baseUrl", "bundleVersions", "profileVersions", "updatedAt"],
+  "properties": {
+    "id": {"type": "string", "pattern": "^tl:registry:"},
+    "operatorOrganizationId": {"type": "string", "pattern": "^tl:org:"},
+    "baseUrl": {"type": "string", "format": "uri"},
+    "bundleVersions": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+    "profileVersions": {"type": "object", "additionalProperties": {"type": "string"}},
+    "keyIds": {"type": "array", "items": {"type": "string", "pattern": "^tl:key:"}},
+    "peers": {"type": "array", "items": {"type": "string", "format": "uri"}},
+    "updatedAt": {"type": "string", "format": "date-time"}
+  }
+}
