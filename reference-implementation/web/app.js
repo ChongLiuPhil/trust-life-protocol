@@ -25,7 +25,11 @@ function fromBundle(b, id) {
     })),
     cryptographic: null,
     pilotAssessment: null,
-    qrResolverPath: null
+    pilotLifecycle: null,
+    publicationAllowed: null,
+    publicationReasons: [],
+    qrResolverPath: null,
+    publicProjectionPath: null
   };
 }
 
@@ -52,11 +56,25 @@ try {
   const v = await loadView();
   const c = v.conformance;
   const a = v.pilotAssessment;
+  const lifecycle = v.pilotLifecycle;
   const canonical = new URL(location.href);
   canonical.search = '';
   canonical.searchParams.set('subject', v.subject.id);
   const qrTarget = v.qrResolverPath ? new URL(v.qrResolverPath, location.origin).href : canonical.href;
+  const projectionUrl = v.publicProjectionPath ? new URL(v.publicProjectionPath, location.origin).href : null;
   const auth = v.cryptographic;
+
+  const lifecycleSection = lifecycle ? `
+    <hr><h2>Current pilot lifecycle</h2>
+    <div class="grid">
+      <div><div class="eyebrow">Lifecycle state</div><p><span class="level">${esc(lifecycle.state)}</span></p></div>
+      <div><div class="eyebrow">Current assessment recorded by lifecycle</div><p>${esc(lifecycle.currentAssessmentDecision)}</p></div>
+      <div><div class="eyebrow">Current public projection</div><p><strong>${v.publicationAllowed ? 'allowed' : 'blocked'}</strong></p></div>
+    </div>
+    <p class="muted">Updated ${esc(lifecycle.updatedAt)} · ${esc(lifecycle.reason || '')}</p>
+    ${v.publicationReasons?.length ? `<p><strong>Publication guard reasons:</strong> ${esc(v.publicationReasons.join('; '))}</p>` : ''}
+    ${projectionUrl && v.publicationAllowed ? `<p><a href="${esc(projectionUrl)}">open current public projection JSON</a></p>` : ''}
+    <p class="muted">A historical assessment can remain visible after suspension, but it must not be presented as a current live publication.</p>` : '';
 
   app.innerHTML = `
     <div class="eyebrow">Subject</div><h2>${esc(v.subject.name)}</h2>
@@ -67,12 +85,14 @@ try {
       <div><div class="eyebrow">Unresolved incidents</div><p class="ok">${esc(v.unresolvedIncidents)}</p></div>
     </div>
 
+    ${lifecycleSection}
+
     ${a ? `<hr><h2>Pilot conformance assessment</h2>
       <p><span class="level">${esc(a.decision)}</span> · ${esc(a.profileId)} v${esc(a.profileVersion)} · overall evidence level ${esc(a.overallEvidenceLevel || 'n/a')}</p>
       <p class="muted">Requirement-level findings are shown individually; this is not a universal trust score.</p>
       ${a.findings.map(f => `<div class="requirement"><p>${findingBadge(f.status)} <strong>${esc(f.requirementId)}</strong> · ${esc(f.message)}</p>${f.basis?.claimIds?.length ? `<p class="mono">Claims: ${esc(f.basis.claimIds.join(', '))}</p>` : ''}${f.basis?.missing?.length ? `<p class="muted">Missing/failed conditions: ${esc(f.basis.missing.join(', '))}</p>` : ''}</div>`).join('')}
       ${a.blockingGaps.length ? `<p><strong>Blocking gaps:</strong> ${esc(a.blockingGaps.join(', '))}</p>` : '<p><strong>Blocking gaps:</strong> none</p>'}
-      <p class="muted">${esc(a.notice)}</p>` : `<hr><p class="muted">Pilot onboarding assessment is available when served by the v0.4 reference Registry.</p>`}
+      <p class="muted">${esc(a.notice)}</p>` : `<hr><p class="muted">Pilot onboarding assessment is available when served by the v0.5 reference Registry.</p>`}
 
     ${auth ? `<hr><h2>Cryptographic checks</h2>
       <p>${auth.manifests.map(x => badge('evidence manifest signature', x.valid)).join(' ') || 'No signed manifest for this subject.'}</p>
