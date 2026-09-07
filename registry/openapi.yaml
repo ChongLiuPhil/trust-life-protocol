@@ -1,13 +1,13 @@
 openapi: 3.1.0
 info:
   title: Trust & Life Read-only Registry API
-  version: 0.4.0
+  version: 0.5.0
   description: >-
     Public lookup, signing-key, credential-status, federation discovery,
-    pilot onboarding, explainable conformance assessment, and QR resolver API.
-    Responses expose scoped evidence and trust metadata; they are not legal
-    certification, professional audit opinions, purchasing recommendations,
-    or safety guarantees.
+    pilot onboarding, explainable conformance assessment, lifecycle state,
+    guarded public projection, and QR resolver API. Responses expose scoped
+    evidence and trust metadata; they are not legal certification, professional
+    audit opinions, purchasing recommendations, or safety guarantees.
 servers:
   - url: http://127.0.0.1:8080
 paths:
@@ -67,8 +67,40 @@ paths:
           required: true
           schema: {type: string}
       responses:
-        '200': {description: Explainable requirement-level pilot assessment}
+        '200': {description: Explainable requirement-level pilot assessment evaluated against the current demo lifecycle timestamp}
         '404': {description: Assessment not found}
+  /v1/pilots:
+    get:
+      operationId: listPilots
+      responses:
+        '200': {description: Public-safe field-pilot lifecycle summaries}
+  /v1/pilots/{pilotId}:
+    get:
+      operationId: getPilot
+      parameters:
+        - in: path
+          name: pilotId
+          required: true
+          schema: {type: string}
+      responses:
+        '200': {description: Current lifecycle and publication state for a pilot}
+        '404': {description: Pilot not found}
+  /v1/public-projection/{subjectId}:
+    get:
+      operationId: getCurrentPublicProjection
+      description: >-
+        Returns the current public projection only when the subject is within
+        the pilot scope, lifecycle state is live, publication is allowed, and
+        the current deterministic assessment is ready or ready-with-advisories.
+      parameters:
+        - in: path
+          name: subjectId
+          required: true
+          schema: {type: string}
+      responses:
+        '200': {description: Current lifecycle-gated public Registry projection}
+        '404': {description: Subject is unknown or outside the pilot public projection scope}
+        '409': {description: Current lifecycle or assessment state blocks publication}
   /v1/keys:
     get:
       operationId: listPublicKeys
@@ -110,7 +142,7 @@ paths:
           required: true
           schema: {type: string}
       responses:
-        '200': {description: Consumer verification view including evidence, cryptographic checks, and pilot findings}
+        '200': {description: Consumer verification view including evidence, cryptographic checks, pilot findings, lifecycle, and current publication state}
         '404': {description: Subject not found}
   /v1/subjects/{subjectId}/assessment:
     get:
@@ -132,13 +164,15 @@ paths:
           required: true
           schema: {type: string}
       responses:
-        '200': {description: Portable Trust & Life resolver and verification targets for QR encoding}
+        '200': {description: Portable Trust & Life resolver, verification, and current-public-projection targets for QR use}
         '404': {description: Subject not found}
   /r/{subjectId}:
     get:
       operationId: resolveSubject
       description: >-
-        Trust & Life demonstration resolver. This path is not itself a GS1
+        Trust & Life demonstration resolver. The resolver may remain available
+        to show a suspension/withdrawal notice even when the current public
+        conformance projection is blocked. This path is not itself a GS1
         Digital Link identifier. Operators with properly assigned GS1 keys may
         integrate a GS1-conformant resolver separately.
       parameters:
