@@ -1,6 +1,6 @@
 # Reference Implementation v0.5
 
-The reference implementation remains dependency-free and uses Node.js built-ins for cryptography, HTTP, deterministic conformance logic, lifecycle checks, and guarded public projection.
+The reference implementation remains dependency-free and uses Node.js built-ins for cryptography, HTTP, deterministic conformance logic, lifecycle checks, guarded public projection, and regression testing.
 
 ## Verify the complete synthetic field pilot
 
@@ -8,6 +8,8 @@ The reference implementation remains dependency-free and uses Node.js built-ins 
 cd reference-implementation
 npm run verify
 ```
+
+`npm run verify` is the contributor and CI gate. A change should not be considered ready until this command succeeds locally and in GitHub Actions.
 
 The verification suite checks:
 
@@ -21,9 +23,11 @@ The verification suite checks:
 8. a deliberate negative application that MUST evaluate to `not-ready`;
 9. valid `live` and `suspended` field-pilot lifecycle fixtures;
 10. a live public projection that MUST be allowed;
-11. a suspended public projection that MUST be blocked.
+11. a suspended public projection that MUST be blocked;
+12. the public Registry HTTP success and rejection contracts, including 404/405 behavior, cache/CORS headers, resolver redirects, public-safe onboarding views, and consumer UI availability;
+13. OpenAPI drift checks for the complete documented read-only surface, unique operation IDs, expected response status codes, and critical safety/interoperability wording.
 
-The negative paths are intentional. CI must prove that a blocking conformance gap cannot be averaged away and that a historical `ready` assessment cannot keep publishing as current after suspension.
+The negative paths are intentional. CI must prove that a blocking conformance gap cannot be averaged away, that a historical `ready` assessment cannot keep publishing as current after suspension, and that clients continue to receive stable rejection semantics.
 
 ## Useful commands
 
@@ -34,9 +38,13 @@ npm run assess:gap
 npm run verify:pilot-state
 npm run export:public
 npm run export:suspended
+npm run verify:http
+npm run verify:openapi
 ```
 
-Core modules:
+Use the narrower commands while developing a change, but run `npm run verify` before opening or merging a pull request.
+
+Core modules and checks:
 
 - `conformance.js` — deterministic requirement-level evaluation;
 - `pilot-check.js` — lifecycle-state invariants;
@@ -44,6 +52,8 @@ Core modules:
 - `public-export.js` — CLI wrapper around the publication guard;
 - `crypto.js` / `crypto-check.js` — signature helpers/checks;
 - `server.js` — read-only demonstration Registry/API;
+- `http-contract-check.js` — end-to-end Registry/API success, privacy-boundary, header, redirect, and negative-path checks;
+- `openapi-contract-check.js` — dependency-free guard against documented API/status-code drift;
 - `web/` — consumer verification page.
 
 The CLI and Registry server share the same conformance/publication modules so identical inputs cannot silently receive different machine decisions simply because they use a different interface.
@@ -79,7 +89,19 @@ Useful v0.5 endpoints include:
 
 `/v1/public-projection/{subjectId}` is stricter than the resolver. It returns a current public projection only when the subject is in scope, lifecycle is `live`, publication is allowed, and the current assessment is `ready` or `ready-with-advisories`. A suspended pilot should still be able to resolve to a page explaining its status, but its current conformance projection must be blocked.
 
-See `registry/openapi.yaml` for the documented read-only surface.
+See `registry/openapi.yaml` for the documented read-only surface. If an endpoint, method, status code, or public contract changes intentionally, update the implementation, OpenAPI description, and contract checks together in the same pull request.
+
+## Public API stability rules
+
+The v0.x API is still a draft, but accidental drift should be treated as a defect. In particular:
+
+- keep the Registry reference API read-only unless the protocol explicitly introduces a reviewed write surface;
+- preserve explicit 404/405/409 semantics instead of collapsing expected client errors into 500 responses;
+- keep public onboarding responses free of restricted document references and sensitive intake material;
+- keep current publication state distinct from resolver/history availability;
+- keep evidence/signature validity distinct from claims of truth, safety, legality, or regulatory approval;
+- keep Trust & Life synthetic subject identifiers distinct from GS1-assigned identifiers;
+- update `registry/openapi.yaml` and both contract checks whenever an intentional public behavior change is made.
 
 ## What the evaluator can decide
 
