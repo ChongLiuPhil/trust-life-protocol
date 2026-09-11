@@ -14,7 +14,8 @@
     "verify:pilot-state": "node pilot-check.js ../field-pilot/demo-state.json ../field-pilot/demo-suspended-state.json",
     "export:public": "node public-export.js ../examples/apple-supply-chain/onboarding/application.json ../profiles/food-produce/TL-FRESH-PRODUCE-001.profile.json ../examples/apple-supply-chain/trust-bundle.json ../field-pilot/demo-state.json --expect-allowed=true",
     "export:suspended": "node public-export.js ../examples/apple-supply-chain/onboarding/application.json ../profiles/food-produce/TL-FRESH-PRODUCE-001.profile.json ../examples/apple-supply-chain/trust-bundle.json ../field-pilot/demo-suspended-state.json --expect-allowed=false",
-    "verify": "npm run verify:demo && npm run verify:vc && npm run verify:crypto && npm run verify:onboarding && npm run assess:pilot && npm run assess:gap && npm run verify:pilot-state && npm run export:public && npm run export:suspended",
+    "verify:http": "node http-contract-check.js",
+    "verify": "npm run verify:demo && npm run verify:vc && npm run verify:crypto && npm run verify:onboarding && npm run assess:pilot && npm run assess:gap && npm run verify:pilot-state && npm run export:public && npm run export:suspended && npm run verify:http",
     "serve": "node server.js"
   }
 }
