@@ -54,6 +54,28 @@ The project favors process observability and data minimization.
 
 It is appropriate to cite and map to standards such as GS1 EPCIS, HACCP frameworks, applicable laws, and other technical or safety standards. Do not paste copyrighted standards text into this repository unless its license explicitly permits redistribution.
 
+## Reference implementation changes
+
+The reference implementation targets Node.js 22 or newer and intentionally avoids runtime dependencies. Before opening or merging a pull request that changes executable behavior, run:
+
+```bash
+cd reference-implementation
+npm test
+```
+
+`npm test` runs the complete verification gate, including cryptographic fixtures, onboarding/conformance checks, lifecycle/publication invariants, Registry HTTP contracts, and OpenAPI drift checks.
+
+When changing a public Registry behavior, update all affected layers together:
+
+- implementation behavior;
+- `registry/openapi.yaml`;
+- success and failure contract tests;
+- user-facing/reference documentation when semantics change.
+
+Do not weaken a negative-path test merely to make CI pass. If an existing rejection behavior is intentionally changing, explain why the new behavior is safer or clearer and update the documented contract in the same pull request.
+
+Public API changes should preserve the project's core distinctions: integrity is not factual truth, a signature is not authority, `ready` is not product safety, resolver/history availability is not current publication permission, and synthetic Trust & Life identifiers are not GS1-assigned identifiers.
+
 ## Pull requests
 
 A pull request changing a normative standard should include:
@@ -64,5 +86,7 @@ A pull request changing a normative standard should include:
 - foreseeable failure modes;
 - privacy and cost implications;
 - migration notes if compatibility changes.
+
+A pull request changing the reference implementation should also state which verification commands were run and call out any intentional public API or failure-contract changes.
 
 During v0.x, maintainers may request experimental evidence before accepting requirements that impose substantial hardware, monitoring, or verification costs.
