@@ -4,7 +4,11 @@
   "private": true,
   "description": "Dependency-free Trust & Life integrity, federation, onboarding, explainable conformance, and field-pilot reference implementation",
   "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
+    "test": "npm run verify",
     "verify:demo": "node verifier.js ../examples/apple-supply-chain/trust-bundle.json",
     "verify:vc": "node vc-check.js ../examples/apple-supply-chain/credentials/lab-attestation.vc.json",
     "verify:crypto": "node crypto-check.js ../examples/apple-supply-chain/trust-bundle.json",
