@@ -15,7 +15,9 @@ const bundlePath = path.join(demoRoot, 'trust-bundle.json');
 const applicationPath = path.join(demoRoot, 'onboarding', 'application.json');
 const gapApplicationPath = path.join(demoRoot, 'onboarding', 'application-gap.json');
 const profilePath = path.join(repoRoot, 'profiles', 'food-produce', 'TL-FRESH-PRODUCE-001.profile.json');
-const pilotStatePath = path.join(repoRoot, 'field-pilot', 'demo-state.json');
+const pilotStatePath = process.env.TL_PILOT_STATE_PATH
+  ? path.resolve(here, process.env.TL_PILOT_STATE_PATH)
+  : path.join(repoRoot, 'field-pilot', 'demo-state.json');
 const descriptorPath = path.join(repoRoot, 'registry', 'descriptor.json');
 const peerDescriptorPath = path.join(repoRoot, 'registry', 'peers', 'secondary.json');
 const statusPath = path.join(repoRoot, 'registry', 'demo', 'credential-status.json');
@@ -318,6 +320,7 @@ const server = http.createServer((req, res) => {
     if (url.pathname === '/app.js') return serveFile(res, path.join(webRoot, 'app.js'), 'text/javascript; charset=utf-8');
     return json(res, 404, { error: 'not_found' });
   } catch (error) {
+    if (error instanceof URIError) return json(res, 400, { error: 'invalid_path_encoding' });
     json(res, 500, { error: 'internal_error', message: error.message });
   }
 });
