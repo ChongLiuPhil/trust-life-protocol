@@ -169,13 +169,16 @@ async function main() {
       assert(response.json?.error === errorCode, `${path}: expected error ${errorCode}, got ${response.json?.error}`);
     }
 
+    const malformed = await get('/v1/subjects/%E0%A4%A', 'malformed path encoding', 400);
+    assert(malformed.json?.error === 'invalid_path_encoding', 'malformed path must not surface as internal_error');
+
     for (const method of ['POST', 'PUT', 'PATCH', 'DELETE']) {
       const response = await request('/health', { method });
       assertJsonResponse(response, `${method} rejection`, 405);
       assert(response.json?.error === 'method_not_allowed', `${method}: method error contract changed`);
     }
 
-    console.log('HTTP contract checks passed across Registry, lifecycle, publication, resolver, UI, and negative paths.');
+    console.log('HTTP contract checks passed across Registry, lifecycle, publication, resolver, UI, malformed paths, and negative paths.');
   } finally {
     if (child.exitCode === null) child.kill('SIGTERM');
     await Promise.race([
