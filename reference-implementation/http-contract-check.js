@@ -150,10 +150,10 @@ async function main() {
     assert(page.headers['cache-control'] === 'no-store', 'verification UI must disable caching');
 
     const missingCases = [
-      ['/v1/profiles/TL-MISSING', 'profile_not_found'],
-      ['/v1/onboarding/tl%3Aonboarding%3Amissing', 'onboarding_not_found'],
-      ['/v1/onboarding/tl%3Aonboarding%3Amissing/assessment', 'assessment_not_found'],
-      ['/v1/pilots/tl%3Apilot%3Amissing', 'pilot_not_found'],
+      ['/v1/profiles/TL-MISSING', 'not_found'],
+      ['/v1/onboarding/tl%3Aonboarding%3Amissing', 'not_found'],
+      ['/v1/onboarding/tl%3Aonboarding%3Amissing/assessment', 'not_found'],
+      ['/v1/pilots/tl%3Apilot%3Amissing', 'not_found'],
       ['/v1/public-projection/tl%3Asubject%3Amissing', 'public_projection_not_found'],
       ['/v1/keys/tl%3Akey%3Amissing', 'key_not_found'],
       ['/v1/credentials/urn%3Auuid%3Amissing/status', 'credential_status_not_found'],
